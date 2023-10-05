@@ -63,10 +63,12 @@ namespace timer_winforms
 
         private void listView1_Click(object sender, EventArgs a)
         {
-            Form2 editWindow = new Form2();
-            //editWindow.Form1 = this;
             
-            editWindow.entryIndex = listView1.SelectedIndices[0];
+            label7.Text = listView1.SelectedIndices[0].ToString();
+            label6.Text = (Program.history.Count - listView1.SelectedIndices[0] - 1).ToString();
+            //editWindow.Form1 = this;
+            Form2 editWindow = new Form2(this);
+            editWindow.entryIndex = Program.history.Count - listView1.SelectedIndices[0] - 1;
             
             editWindow.Show();
         }
@@ -119,7 +121,7 @@ namespace timer_winforms
         }
 
 
-        private void ShowHistory() 
+        public void ShowHistory() 
         {
             //Console.WriteLine("Here is the history:");
             //for (int i = 0; i < history.Count; i++)
@@ -140,10 +142,9 @@ namespace timer_winforms
                 listView1.Columns.Add(Program.fields[j], 100, HorizontalAlignment.Center);
 
             
-            for (int i = 0; i < Program.history.Count; i++)
+            for (int i = Program.history.Count - 1; i >= 0; i--)
             {
-                ListViewItem newItem = new ListViewItem (Program.history[i]);
-                listView1.Items.Insert(0, newItem);
+                listView1.Items.Add(new ListViewItem(Program.history[i]));
             }
             
         }
@@ -160,7 +161,7 @@ namespace timer_winforms
                 using (StreamReader sr = File.OpenText(Program.pathToSave))
                 {
                     string s;
-
+                    Program.history.Clear();
 
                     while ((s = sr.ReadLine()) != null)
                     {
@@ -182,13 +183,14 @@ namespace timer_winforms
                 {
                     for (int i = 0; i < Program.history.Count; i++)
                     {
-                        for (int j = 0; j < 6; j++)
-                            sw.Write("{0}\t", Program.history[i][j]);
+                        sw.Write("{0}", Program.history[i][0]);
+                        for (int j = 1; j < 6; j++)
+                            sw.Write("\t{0}", Program.history[i][j]);
                         sw.Write("\n");
                     }
                 }
             }
-            else
+            else if (append)
             {
                 using (StreamWriter sw = new StreamWriter(Program.pathToSave, append))
                 {
@@ -198,12 +200,28 @@ namespace timer_winforms
                     //        sw.Write("{0}\t", history[i][j]);
                     //    sw.Write("\n");
                     //}
-                    for (int i = 0; i < currentEntry.Length; i++)
+                    sw.Write("{0}", currentEntry[0]);
+                    for (int i = 1; i < currentEntry.Length; i++)
                     {
-                        sw.Write("{0}\t", currentEntry[i]);
+                        sw.Write("\t{0}", currentEntry[i]);
                         
                     }
                     sw.Write("\n");
+
+                }
+            }
+            else
+            {
+                using (StreamWriter sw = new StreamWriter(Program.pathToSave, append))
+                {
+                    for (int i = 0; i < Program.history.Count; i++)
+                    {
+                        sw.Write("{0}", Program.history[i][0]);
+                        for (int j = 1; j < 6; j++)
+                            sw.Write("\t{0}", Program.history[i][j]);
+                        sw.Write("\n");
+                    }
+
 
                 }
             }

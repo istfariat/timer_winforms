@@ -31,6 +31,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox4 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -59,16 +62,48 @@
             this.textBox1.Size = new System.Drawing.Size(100, 23);
             this.textBox1.TabIndex = 2;
             // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(90, 73);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.PlaceholderText = "Field";
+            this.textBox2.Size = new System.Drawing.Size(100, 23);
+            this.textBox2.TabIndex = 2;
+            this.textBox2.LostFocus += new System.EventHandler(this.textBox2_LostFocus);
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(90, 121);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.PlaceholderText = "Project";
+            this.textBox3.Size = new System.Drawing.Size(100, 23);
+            this.textBox3.TabIndex = 2;
+            this.textBox3.LostFocus += new System.EventHandler(this.textBox3_LostFocus);
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(90, 179);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.PlaceholderText = "Stage";
+            this.textBox4.Size = new System.Drawing.Size(100, 23);
+            this.textBox4.TabIndex = 2;
+            this.textBox4.LostFocus += new System.EventHandler(this.textBox4_LostFocus);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Name = "Form2";
             this.Text = "Form2";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
+            this.Load += new System.EventHandler(this.Form2_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -79,5 +114,8 @@
         private Label label1;
         private Button button1;
         private TextBox textBox1;
+        protected TextBox textBox2;
+        private TextBox textBox3;
+        private TextBox textBox4;
     }
 }
