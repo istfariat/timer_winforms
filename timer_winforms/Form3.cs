@@ -1,0 +1,48 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
+namespace timer_winforms
+{
+    public partial class Form3 : Form
+    {
+        public Form3()
+        {
+            InitializeComponent();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void Form3_Load(object sender, EventArgs e)
+        {
+            //dataGridView1 = new DataGridView();
+            dataGridView1.Rows[dataGridView1.Rows.Add()].Cells[0].Value = "Save history to:";
+            dataGridView1.Rows[0].Cells[1].Value = Program.pathToSave;
+            dataGridView1.Rows[dataGridView1.Rows.Add()].Cells[1].Value = Program.pathToSave;
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+            }
+            Console.WriteLine(result); // <-- For debugging use.
+        }
+    }
+}

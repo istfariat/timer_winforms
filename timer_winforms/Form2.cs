@@ -14,6 +14,8 @@ namespace timer_winforms
     {
 
         public int entryIndex;
+        private (DateTime startTime, DateTime endTime, TimeSpan duration, string field, string project, string stage) tempEntry;
+
         //public Form2()
         //{
         //    InitializeComponent();
@@ -57,10 +59,12 @@ namespace timer_winforms
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Program.history[entryIndex][3] = textBox2.Text;
-            Program.history[entryIndex][4] = textBox3.Text;
-            Program.history[entryIndex][5] = textBox4.Text;
+            tempEntry.field = textBox2.Text;
+            tempEntry.project = textBox3.Text;
+            tempEntry.stage = textBox4.Text;
+            
 
+            Program.history[entryIndex] = tempEntry;
 
             mainForm.SaveEntry();
             mainForm.ShowHistory();
@@ -68,9 +72,28 @@ namespace timer_winforms
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            textBox2.Text = Program.history[entryIndex][3];
-            textBox3.Text = Program.history[entryIndex][4];
-            textBox4.Text = Program.history[entryIndex][5];
+            tempEntry = Program.history[entryIndex];
+
+
+            textBox2.Text = tempEntry.field;
+            textBox3.Text = tempEntry.project;
+            textBox4.Text = tempEntry.stage;
+            dateTimePicker1.Value = tempEntry.startTime;
+            dateTimePicker2.Value = tempEntry.endTime;
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            tempEntry.startTime = dateTimePicker1.Value;
+            tempEntry.duration = tempEntry.endTime - tempEntry.startTime;
+            textBox1.Text = tempEntry.duration.ToString();
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            tempEntry.endTime = dateTimePicker2.Value;
+            tempEntry.duration = tempEntry.endTime - tempEntry.startTime;
+            textBox1.Text = tempEntry.duration.ToString();
         }
 
 

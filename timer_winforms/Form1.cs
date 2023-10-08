@@ -1,56 +1,60 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace timer_winforms
 {
     public partial class Form1 : Form
     {
 
-        static Stopwatch mainTimer = new Stopwatch();
+        //static Stopwatch mainTimer = new Stopwatch();
         static System.Windows.Forms.Timer secTimer = new System.Windows.Forms.Timer();
 
-        static string[] currentEntry = new string[6];
+        static (DateTime startTime, DateTime endTime, TimeSpan duration, string field, string project, string stage) currentEntry;
 
-        static int x = 0;
+        //static int x = 0;
 
         public Form1()
         {
             InitializeComponent();
             ShowHistory();
-            
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             secTimer.Interval = 100;
 
-            if (mainTimer.IsRunning)
-            {                
-                mainTimer.Stop();
+            if (secTimer.Enabled)
+            {
+                //mainTimer.Stop();
                 secTimer.Stop();
-                string duration = mainTimer.Elapsed.ToString("c");
-                currentEntry[1] = DateTime.Now.ToString();
-                currentEntry[2] = duration.Substring(0, duration.Length - 8);
 
-                //label1.Text = duration.Substring(0, duration.Length - 5); 
+                currentEntry.endTime = DateTime.Now;
+                currentEntry.duration = currentEntry.endTime - currentEntry.startTime;
+                //string duration = currentEntry.duration.ToString("c");
+
+                label2.Text = currentEntry.duration.ToString("c");
                 Program.history.Add(currentEntry);
-                
+
                 SaveEntry(true);
-                
+
                 ShowHistory();
 
-                mainTimer.Reset();
+                //mainTimer.Reset();
                 textBox1.Clear();
                 textBox2.Clear();
                 textBox3.Clear();
-                Array.Clear(currentEntry);
+                //Array.Clear(currentEntry);
+                //currentEntry.Item1.
             }
             else
             {
-                mainTimer.Start();
-                currentEntry[0] = DateTime.Now.ToString();
+                //mainTimer.Start();
+                currentEntry.startTime = DateTime.Now;
                 secTimer.Start();
                 secTimer.Tick += secTimer_Tick;
+                dateTimePicker1.Value = currentEntry.startTime;
 
             }
         }
@@ -63,17 +67,15 @@ namespace timer_winforms
 
         private void listView1_Click(object sender, EventArgs a)
         {
-            
+
             label7.Text = listView1.SelectedIndices[0].ToString();
             label6.Text = (Program.history.Count - listView1.SelectedIndices[0] - 1).ToString();
-            //editWindow.Form1 = this;
             Form2 editWindow = new Form2(this);
             editWindow.entryIndex = Program.history.Count - listView1.SelectedIndices[0] - 1;
-            
             editWindow.Show();
         }
 
-            private void textBox1_KeyPress(object sender, System.Windows.Forms.KeyEventArgs e)
+        private void textBox1_KeyPress(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Back)
                 this.ActiveControl = null;
@@ -81,10 +83,8 @@ namespace timer_winforms
 
         private void textBox1_Leave(object sender, EventArgs a)
         {
-            //textBox1.ForeColor = Color.Red;
-            //textBox1.BackColor = Color.White;
-            currentEntry[3] = textBox1.Text;
-            label5.Text = currentEntry[3];
+            currentEntry.field = textBox1.Text;
+            label5.Text = currentEntry.field;
         }
 
 
@@ -97,21 +97,24 @@ namespace timer_winforms
 
         void textBox2_Leave(object sender, EventArgs a)
         {
-            currentEntry[4] = textBox2.Text;
+            currentEntry.project = textBox2.Text;
         }
 
         void textBox3_Leave(object sender, EventArgs a)
         {
-            currentEntry[5] = textBox3.Text;
+            currentEntry.stage = textBox3.Text;
         }
 
 
         void secTimer_Tick(object sender, EventArgs a)
         {
-            string duration2 = mainTimer.Elapsed.ToString("c");
-            label2.Text = duration2.Substring(0, duration2.Length - 5);
-            label6.Text = ActiveControl.ToString();
-            //label5.Text = currentEntry[3];
+            //string duration2 = mainTimer.Elapsed.ToString("c");
+
+
+            currentEntry.duration = DateTime.Now - currentEntry.startTime;
+            //label6.Text = ActiveControl.ToString();
+            label2.Text = currentEntry.duration.ToString("c");
+            //label5.Text = currentEntry.field;
             //label5.Update();
         }
 
@@ -120,33 +123,31 @@ namespace timer_winforms
 
         }
 
-
-        public void ShowHistory() 
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
-            //Console.WriteLine("Here is the history:");
-            //for (int i = 0; i < history.Count; i++)
-            //{
-            //if (selectionActive && selection == i)
-            //{
-            //    Console.WriteLine("Timer entry {0}: (selected)", i);
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Timer entry {0}:", i);
-            //}
+            currentEntry.startTime = dateTimePicker1.Value;            
+        }
 
+
+        public void ShowHistory()
+        {
             listView1.Clear();
             LoadEntry();
 
             for (int j = 0; j < Program.fields.Length; j++)
                 listView1.Columns.Add(Program.fields[j], 100, HorizontalAlignment.Center);
 
-            
+
             for (int i = Program.history.Count - 1; i >= 0; i--)
             {
-                listView1.Items.Add(new ListViewItem(Program.history[i]));
+                //foreach (var x in Program.history[i])
+                //    listView1.x.
+                //listView1.Items.Add(new ListViewItem(Program.history[i].ToString())); // ??????
+                listView1.Items.Add(new ListViewItem(new string[] { Program.history[i].startTime.ToString(), Program.history[i].endTime.ToString(),
+                                                                                    Program.history[i].duration.ToString(), Program.history[i].field,
+                                                                                    Program.history[i].project, Program.history[i].stage }));
             }
-            
+
         }
 
         public void LoadEntry()
@@ -157,19 +158,17 @@ namespace timer_winforms
             //}
             //else
             //{
-                // Open the file to read from.
-                using (StreamReader sr = File.OpenText(Program.pathToSave))
-                {
-                    string s;
-                    Program.history.Clear();
+            // Open the file to read from.
+            using (StreamReader sr = File.OpenText(Program.pathToSave))
+            {
+                string s;
+                Program.history.Clear();
 
-                    while ((s = sr.ReadLine()) != null)
-                    {
-                        string[] currentLine = s.Split("\t");
-                        Program.history.Add(currentLine);
-                        //Console.WriteLine(s);
-                    }
+                while ((s = sr.ReadLine()) != null)
+                {
+                    Program.history.Add(ParseArrayToTuple(s.Split("\t")));
                 }
+            }
             //}
         }
 
@@ -183,10 +182,7 @@ namespace timer_winforms
                 {
                     for (int i = 0; i < Program.history.Count; i++)
                     {
-                        sw.Write("{0}", Program.history[i][0]);
-                        for (int j = 1; j < 6; j++)
-                            sw.Write("\t{0}", Program.history[i][j]);
-                        sw.Write("\n");
+                        sw.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n", currentEntry.startTime.ToString(), currentEntry.endTime.ToString(), TimeSpanToString(currentEntry.duration), currentEntry.field, currentEntry.project, currentEntry.stage);
                     }
                 }
             }
@@ -194,20 +190,7 @@ namespace timer_winforms
             {
                 using (StreamWriter sw = new StreamWriter(Program.pathToSave, append))
                 {
-                    //for (int i = 0; i < history.Count; i++)
-                    //{
-                    //    for (int j = 0; j < 6; j++)
-                    //        sw.Write("{0}\t", history[i][j]);
-                    //    sw.Write("\n");
-                    //}
-                    sw.Write("{0}", currentEntry[0]);
-                    for (int i = 1; i < currentEntry.Length; i++)
-                    {
-                        sw.Write("\t{0}", currentEntry[i]);
-                        
-                    }
-                    sw.Write("\n");
-
+                    sw.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n", currentEntry.startTime.ToString(), currentEntry.endTime.ToString(), TimeSpanToString(currentEntry.duration), currentEntry.field, currentEntry.project, currentEntry.stage);
                 }
             }
             else
@@ -216,13 +199,8 @@ namespace timer_winforms
                 {
                     for (int i = 0; i < Program.history.Count; i++)
                     {
-                        sw.Write("{0}", Program.history[i][0]);
-                        for (int j = 1; j < 6; j++)
-                            sw.Write("\t{0}", Program.history[i][j]);
-                        sw.Write("\n");
+                        sw.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n", Program.history[i].startTime.ToString(), Program.history[i].endTime.ToString(), TimeSpanToString(Program.history[i].duration), Program.history[i].field, Program.history[i].project, Program.history[i].stage);
                     }
-
-
                 }
             }
 
@@ -243,42 +221,55 @@ namespace timer_winforms
         {
             string name3 = textBox1.Text;
         }
+
+        static (DateTime startTime, DateTime endTime, TimeSpan duration, string field, string project, string stage) ParseArrayToTuple(string[] sourceArray)
+        {
+            (DateTime startTime, DateTime endTime, TimeSpan duration, string field, string project, string stage) result;
+
+            result.startTime = DateTime.Parse(sourceArray[0]);
+            result.endTime = DateTime.Parse(sourceArray[1]);
+            result.duration = TimeSpan.Parse(sourceArray[2]);
+
+            result.field = sourceArray[3];
+            result.project = sourceArray[4];
+            result.stage = sourceArray[5];
+
+            return result;
+        }
+
+        private static string TimeSpanToString(TimeSpan sourceTimeSpan)
+        {
+            string result = sourceTimeSpan.ToString("c");
+            return result = result.Substring(0, result.Length - 8);
+        }
+
+        private void Form1_Click(object sender, EventArgs e)
+        {
+            ActiveControl = null;
+        }
+
+
+        [DllImport("user32")]
+        private static extern bool HideCaret(IntPtr hWnd);
+
+
+        private void textBox4_GotFocus(object sender, EventArgs e)
+        {
+            HideCaret(textBox4.Handle);
+        }
+
+        private void textBox4_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //Form3 settingsWindow = new Form3(this);
+            Form3 settingsWindow = new Form3();
+            //settingsWindow.entryIndex = Program.history.Count - listView1.SelectedIndices[0] - 1;
+            settingsWindow.Show();
+        }
+
     }
-
-    //static void startTimer()
-    //{
-    //    if (mainTimer.IsRunning)
-    //    {
-    //        Console.WriteLine("Timer already running, it is {0} currently", RoundToSeconds(mainTimer.Elapsed));
-    //    }
-    //    else
-    //    {
-    //        string[] newEntry = new string[6];
-
-    //        //LoadEntry();
-    //        history.Add(newEntry);
-    //        mainTimer.Start();
-    //        history[history.Count - 1][0] = DateTime.Now.ToString();
-    //        SaveEntry(true);
-    //    }
-    //}
-
-    //static void stopTimer()
-    //{
-    //    if (mainTimer.IsRunning)
-    //    {
-    //        string roundedTime = RoundToSeconds(mainTimer.Elapsed);
-    //        mainTimer.Stop();
-    //        history[history.Count - 1][1] = DateTime.Now.ToString();
-    //        history[history.Count - 1][2] = roundedTime;
-    //        Console.WriteLine("Last entry was {0} long", roundedTime);
-    //        mainTimer.Reset();
-    //        SaveEntry();
-    //    }
-    //    else
-    //    {
-    //        Console.WriteLine("There is no timer runnig to stop");
-    //    }
-
-    //}
 }
