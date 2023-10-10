@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.VisualBasic.Logging;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -9,8 +10,17 @@ namespace timer_winforms
 
         //static Stopwatch mainTimer = new Stopwatch();
         static System.Windows.Forms.Timer secTimer = new System.Windows.Forms.Timer();
+        static System.Windows.Forms.Timer reminderTimer = new System.Windows.Forms.Timer();
+        static System.Windows.Forms.Timer inactivityTimer = new System.Windows.Forms.Timer();
+        static System.Windows.Forms.Timer trashholdTimer = new System.Windows.Forms.Timer();
+
 
         static (DateTime startTime, DateTime endTime, TimeSpan duration, string field, string project, string stage) currentEntry;
+        List<string>[] knownNames = new List<string>[3];
+
+        int idleInterval = 5 * 60 * 1000;       //user value in min to ms
+
+
 
         //static int x = 0;
 
@@ -19,43 +29,33 @@ namespace timer_winforms
             InitializeComponent();
             ShowHistory();
 
+
+            secTimer.Interval = 100;            //0.1s
+            reminderTimer.Interval = 10000;     //10s
+            inactivityTimer.Interval = idleInterval;
+
+            reminderTimer.Tick += reminderTimer_Tick;
+            secTimer.Tick += secTimer_Tick;
+            inactivityTimer.Tick += inactivityTimer_Tick;
+
+            reminderTimer.Start();
+            inactivityTimer.Start();
+            
+
+            label11.Text = inactivityTimer.Interval.ToString();
+
         }
 
+        #region Form/Control Events
         private void button1_Click(object sender, EventArgs e)
         {
-            secTimer.Interval = 100;
-
             if (secTimer.Enabled)
             {
-                //mainTimer.Stop();
-                secTimer.Stop();
-
-                currentEntry.endTime = DateTime.Now;
-                currentEntry.duration = currentEntry.endTime - currentEntry.startTime;
-                //string duration = currentEntry.duration.ToString("c");
-
-                label2.Text = currentEntry.duration.ToString("c");
-                Program.history.Add(currentEntry);
-
-                SaveEntry(true);
-
-                ShowHistory();
-
-                //mainTimer.Reset();
-                textBox1.Clear();
-                textBox2.Clear();
-                textBox3.Clear();
-                //Array.Clear(currentEntry);
-                //currentEntry.Item1.
+                StoptMainTimer();
             }
             else
             {
-                //mainTimer.Start();
-                currentEntry.startTime = DateTime.Now;
-                secTimer.Start();
-                secTimer.Tick += secTimer_Tick;
-                dateTimePicker1.Value = currentEntry.startTime;
-
+                StartMainTimer();
             }
         }
 
@@ -68,23 +68,18 @@ namespace timer_winforms
         private void listView1_Click(object sender, EventArgs a)
         {
 
-            label7.Text = listView1.SelectedIndices[0].ToString();
-            label6.Text = (Program.history.Count - listView1.SelectedIndices[0] - 1).ToString();
+            //label7.Text = listView1.SelectedIndices[0].ToString();
+            //label6.Text = (Program.history.Count - listView1.SelectedIndices[0] - 1).ToString();
             Form2 editWindow = new Form2(this);
             editWindow.entryIndex = Program.history.Count - listView1.SelectedIndices[0] - 1;
             editWindow.Show();
         }
 
-        private void textBox1_KeyPress(object sender, System.Windows.Forms.KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Back)
-                this.ActiveControl = null;
-        }
 
         private void textBox1_Leave(object sender, EventArgs a)
         {
             currentEntry.field = textBox1.Text;
-            label5.Text = currentEntry.field;
+            //label5.Text = currentEntry.field;
         }
 
 
@@ -105,6 +100,54 @@ namespace timer_winforms
             currentEntry.stage = textBox3.Text;
         }
 
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            currentEntry.startTime = dateTimePicker1.Value;
+        }
+
+
+        [DllImport("user32")]
+        private static extern bool HideCaret(IntPtr hWnd);
+        private void textBox4_GotFocus(object sender, EventArgs e)
+        {
+            HideCaret(textBox4.Handle);
+        }
+
+        private void textBox4_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //Form3 settingsWindow = new Form3(this);
+            Form3 settingsWindow = new Form3();
+            //settingsWindow.entryIndex = Program.history.Count - listView1.SelectedIndices[0] - 1;
+            settingsWindow.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            label9.Text = "pressed";
+        }
+
+        private void Form1_Click(object sender, EventArgs e)
+        {
+            ActiveControl = null;
+        }
+
+
+        void reminderTimer_Tick(object sender, EventArgs a)
+        {
+            Form4 reminderWindow = new Form4(this);
+            reminderWindow.Show();
+        }
+
 
         void secTimer_Tick(object sender, EventArgs a)
         {
@@ -118,16 +161,75 @@ namespace timer_winforms
             //label5.Update();
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+
+        [DllImport("user32.dll")]
+        static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
+
+        private void inactivityTimer_Tick(object sender, EventArgs a)
         {
+            //uint idleTime = 0;
+            LASTINPUTINFO lastActive = new LASTINPUTINFO();
+            lastActive.Size = (uint)Marshal.SizeOf(lastActive);
+            uint eventTicks = (uint)Environment.TickCount;
+
+
+            if (GetLastInputInfo(ref lastActive))
+            {
+                uint lastInput = lastActive.Time;
+                uint idleTime = eventTicks - lastInput;
+                int idleTemp = idleInterval - (int)idleTime;
+                if (idleTemp > 0)
+                    inactivityTimer.Interval = idleTemp;
+                else inactivityTimer.Interval = idleInterval;
+                
+                    
+                //label10.Text = (idleTime / 1000).ToString();
+                //label11.Text = inactivityTimer.Interval.ToString();
+
+            }
+            //DateTime lastActive = DateTime.Now;
+            //int nextInactiveCheck = inactivityTimer.Interval - lastActive;
+        }
+
+        struct LASTINPUTINFO
+        {
+            public uint Size;
+            public uint Time;
+        }
+
+
+        #endregion
+
+        #region Functions
+        public void StartMainTimer()
+        {
+            reminderTimer.Stop();
+            secTimer.Start();
+
+            currentEntry.startTime = DateTime.Now;
+            dateTimePicker1.Value = currentEntry.startTime;
+            label9.Text = "";                                       // PLACEHOLDER
 
         }
 
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        private void StoptMainTimer()
         {
-            currentEntry.startTime = dateTimePicker1.Value;            
-        }
+            secTimer.Stop();
+            reminderTimer.Start();
 
+            currentEntry.endTime = DateTime.Now;
+            currentEntry.duration = currentEntry.endTime - currentEntry.startTime;
+            Program.history.Add(currentEntry);
+
+            label2.Text = TimeSpanToString(currentEntry.duration);
+
+            SaveEntry(true);
+            ShowHistory();
+
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox3.Clear();
+        }
 
         public void ShowHistory()
         {
@@ -206,21 +308,7 @@ namespace timer_winforms
 
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            string name1 = textBox1.Text;
-            //label5.Text = name1;
-        }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-            string name2 = textBox1.Text;
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-            string name3 = textBox1.Text;
-        }
 
         static (DateTime startTime, DateTime endTime, TimeSpan duration, string field, string project, string stage) ParseArrayToTuple(string[] sourceArray)
         {
@@ -243,33 +331,51 @@ namespace timer_winforms
             return result = result.Substring(0, result.Length - 8);
         }
 
-        private void Form1_Click(object sender, EventArgs e)
-        {
-            ActiveControl = null;
-        }
+        #endregion
 
 
-        [DllImport("user32")]
-        private static extern bool HideCaret(IntPtr hWnd);
-
-
-        private void textBox4_GotFocus(object sender, EventArgs e)
-        {
-            HideCaret(textBox4.Handle);
-        }
-
-        private void textBox4_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            //Form3 settingsWindow = new Form3(this);
-            Form3 settingsWindow = new Form3();
-            //settingsWindow.entryIndex = Program.history.Count - listView1.SelectedIndices[0] - 1;
-            settingsWindow.Show();
-        }
 
     }
+
+    //class ForegroundTracker
+    //{
+    //    // Delegate and imports from pinvoke.net:
+
+    //    delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType,
+    //        IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+
+    //    [DllImport("user32.dll")]
+    //    static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr
+    //       hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess,
+    //       uint idThread, uint dwFlags);
+
+    //    [DllImport("user32.dll")]
+    //    static extern bool UnhookWinEvent(IntPtr hWinEventHook);
+
+    //    // Constants from winuser.h
+    //    const uint EVENT_SYSTEM_FOREGROUND = 3;
+    //    const uint WINEVENT_OUTOFCONTEXT = 0;
+
+    //    // Need to ensure delegate is not collected while we're using it,
+    //    // storing it in a class field is simplest way to do this.
+    //    static WinEventDelegate procDelegate = new WinEventDelegate(WinEventProc);
+
+    //    public static void Main()
+    //    {
+    //        // Listen for foreground changes across all processes/threads on current desktop...
+    //        IntPtr hhook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero,
+    //                procDelegate, 0, 0, WINEVENT_OUTOFCONTEXT);
+
+    //        // MessageBox provides the necessary mesage loop that SetWinEventHook requires.
+    //        MessageBox.Show("Tracking focus, close message box to exit.");
+
+    //        UnhookWinEvent(hhook);
+    //    }
+
+    //    static void WinEventProc(IntPtr hWinEventHook, uint eventType,
+    //        IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+    //    {
+    //        Console.WriteLine("Foreground changed to {0:x8}", hwnd.ToInt32());
+    //    }
+    //}
 }

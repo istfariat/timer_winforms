@@ -44,6 +44,10 @@
             button2 = new Button();
             label8 = new Label();
             dateTimePicker1 = new DateTimePicker();
+            button3 = new Button();
+            label9 = new Label();
+            label10 = new Label();
+            label11 = new Label();
             SuspendLayout();
             // 
             // button1
@@ -206,13 +210,54 @@
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(200, 23);
             dateTimePicker1.TabIndex = 7;
-            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
+            dateTimePicker1.ValueChanged += dateTimePicker1_ValueChanged;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(615, 174);
+            button3.Name = "button3";
+            button3.Size = new Size(75, 23);
+            button3.TabIndex = 8;
+            button3.Text = "button3";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(627, 145);
+            label9.Name = "label9";
+            label9.Size = new Size(38, 15);
+            label9.TabIndex = 9;
+            label9.Text = "label9";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(573, 373);
+            label10.Name = "label10";
+            label10.Size = new Size(44, 15);
+            label10.TabIndex = 10;
+            label10.Text = "label10";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(573, 400);
+            label11.Name = "label11";
+            label11.Size = new Size(44, 15);
+            label11.TabIndex = 11;
+            label11.Text = "label11";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label11);
+            Controls.Add(label10);
+            Controls.Add(label9);
+            Controls.Add(button3);
             Controls.Add(dateTimePicker1);
             Controls.Add(textBox4);
             Controls.Add(textBox3);
@@ -254,5 +299,9 @@
         private Button button2;
         private Label label8;
         private DateTimePicker dateTimePicker1;
+        private Button button3;
+        private Label label9;
+        private Label label10;
+        private Label label11;
     }
 }

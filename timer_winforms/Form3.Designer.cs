@@ -33,7 +33,10 @@
             settingValue = new DataGridViewTextBoxColumn();
             button1 = new Button();
             openFileDialog1 = new OpenFileDialog();
+            panel1 = new Panel();
+            panel2 = new Panel();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // dataGridView1
@@ -74,17 +77,35 @@
             openFileDialog1.FileName = "openFileDialog1";
             openFileDialog1.FileOk += openFileDialog1_FileOk;
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(panel2);
+            panel1.Location = new Point(308, 321);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(200, 100);
+            panel1.TabIndex = 2;
+            // 
+            // panel2
+            // 
+            panel2.Dock = DockStyle.Bottom;
+            panel2.Location = new Point(0, 73);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(200, 27);
+            panel2.TabIndex = 0;
+            // 
             // Form3
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(panel1);
             Controls.Add(button1);
             Controls.Add(dataGridView1);
             Name = "Form3";
             Text = "Form3";
             Load += Form3_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -95,5 +116,7 @@
         private DataGridViewTextBoxColumn settingValue;
         private Button button1;
         private OpenFileDialog openFileDialog1;
+        private Panel panel1;
+        private Panel panel2;
     }
 }
