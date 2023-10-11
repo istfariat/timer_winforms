@@ -48,6 +48,8 @@
             label9 = new Label();
             label10 = new Label();
             label11 = new Label();
+            label12 = new Label();
+            listView2 = new ListView();
             SuspendLayout();
             // 
             // button1
@@ -249,11 +251,30 @@
             label11.TabIndex = 11;
             label11.Text = "label11";
             // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(197, 411);
+            label12.Name = "label12";
+            label12.Size = new Size(44, 15);
+            label12.TabIndex = 12;
+            label12.Text = "label12";
+            // 
+            // listView2
+            // 
+            listView2.Location = new Point(261, 349);
+            listView2.Name = "listView2";
+            listView2.Size = new Size(280, 77);
+            listView2.TabIndex = 13;
+            listView2.UseCompatibleStateImageBehavior = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(listView2);
+            Controls.Add(label12);
             Controls.Add(label11);
             Controls.Add(label10);
             Controls.Add(label9);
@@ -303,5 +324,7 @@
         private Label label9;
         private Label label10;
         private Label label11;
+        private Label label12;
+        private ListView listView2;
     }
 }

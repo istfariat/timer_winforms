@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace timer_winforms
 {
@@ -22,7 +23,62 @@ namespace timer_winforms
 
 
 
-        //static int x = 0;
+        WinEventDelegate dele = null;
+
+        delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+
+        [DllImport("user32.dll")]
+        static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+
+        private const uint WINEVENT_OUTOFCONTEXT = 0;
+        private const uint EVENT_SYSTEM_FOREGROUND = 3;
+
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        [DllImport("user32.dll")]
+        static extern bool UnhookWinEvent(IntPtr hWinEventHook);
+
+        private string GetActiveWindowTitle()
+        {
+            //string utf8String;
+            //string propEncodeString = string.Empty;
+
+            //byte[] utf8_Bytes = new byte[utf8String.Length];
+            //for (int i = 0; i < utf8String.Length; ++i)
+            //{
+            //    utf8_Bytes[i] = (byte)utf8String[i];
+            //}
+
+            //propEncodeString = Encoding.UTF8.GetString(utf8_Bytes, 0, utf8_Bytes.Length);
+
+
+            const int nChars = 256;
+            IntPtr handle = IntPtr.Zero;
+            StringBuilder Buff = new StringBuilder(nChars);
+            handle = GetForegroundWindow();
+
+            if (GetWindowText(handle, Buff, nChars) > 0)
+            {
+                UnhookWinEvent(handle);
+                listView2.Items.Add(Buff.ToString());
+                //byte[] textBytes = Encoding.UTF8.GetBytes(Buff.ToString());
+                //return Encoding.UTF8.GetString(textBytes);
+                return Buff.ToString();
+            }
+            UnhookWinEvent(handle);
+            return null;
+
+
+        }
+
+        public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+        {
+            label12.Text = GetActiveWindowTitle();
+        }
 
         public Form1()
         {
@@ -40,9 +96,13 @@ namespace timer_winforms
 
             reminderTimer.Start();
             inactivityTimer.Start();
-            
 
+            listView2.Columns.Add("Program", 400, HorizontalAlignment.Center);
+            label5.Text = "ололо";
             label11.Text = inactivityTimer.Interval.ToString();
+
+            dele = new WinEventDelegate(WinEventProc);
+            IntPtr m_hhook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
 
         }
 
@@ -181,8 +241,8 @@ namespace timer_winforms
                 if (idleTemp > 0)
                     inactivityTimer.Interval = idleTemp;
                 else inactivityTimer.Interval = idleInterval;
-                
-                    
+
+
                 //label10.Text = (idleTime / 1000).ToString();
                 //label11.Text = inactivityTimer.Interval.ToString();
 
