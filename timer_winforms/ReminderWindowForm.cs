@@ -45,7 +45,7 @@ namespace timer_winforms
             WindowClose();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonStartFromReminder_Click(object sender, EventArgs e)
         {
             WindowClose(); 
             mainForm.StartMainTimer();

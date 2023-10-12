@@ -29,93 +29,91 @@
         private void InitializeComponent()
         {
             buttonStopStart = new Button();
+            buttonSettings = new Button();
             textBoxField = new TextBox();
-            labelTimerRunning = new Label();
-            listViewHistory = new ListView();
             textBoxSubject = new TextBox();
             textBoxStage = new TextBox();
- 
-            buttonSettings = new Button();
-            label8 = new Label();
+            labelTimerRunning = new Label();
+            listViewHistory = new ListView();
             dateTimePickerStarttimeCurrent = new DateTimePicker();
-            
-            
+
+            label8 = new Label();
             label12 = new Label();
             listView2 = new ListView();
             
             SuspendLayout();
             // 
-            // button1
+            // buttonStopStart
             // 
             buttonStopStart.Location = new Point(343, 162);
-            buttonStopStart.Name = "button1";
+            buttonStopStart.Name = "buttonStopStart";
             buttonStopStart.Size = new Size(114, 44);
             buttonStopStart.TabIndex = 0;
             buttonStopStart.Text = "start/stop";
             buttonStopStart.UseVisualStyleBackColor = true;
-            buttonStopStart.Click += StartStopButton_Click;
+            buttonStopStart.Click += buttonStopStart_Click;
             // 
-            // textBox1
+            // textBoxField
             // 
             textBoxField.Location = new Point(141, 52);
-            textBoxField.Name = "textBox1";
+            textBoxField.Name = "textBoxField";
             textBoxField.PlaceholderText = "Field";
             textBoxField.Size = new Size(100, 23);
             textBoxField.TabIndex = 5;
-            textBoxField.Leave += textBox1_Leave;
+            textBoxField.Leave += textBoxField_Leave;
             // 
-            // label2
+            // labelTimerRunning
             // 
             labelTimerRunning.AutoSize = true;
             labelTimerRunning.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
             labelTimerRunning.Location = new Point(359, 112);
-            labelTimerRunning.Name = "label2";
+            labelTimerRunning.Name = "labelTimerRunning";
             labelTimerRunning.Size = new Size(86, 28);
             labelTimerRunning.TabIndex = 3;
             labelTimerRunning.Text = "00:00:00";
             // 
-            // listView1
+            // listViewHistory
             // 
             listViewHistory.FullRowSelect = true;
             listViewHistory.Location = new Point(42, 246);
             listViewHistory.MultiSelect = false;
-            listViewHistory.Name = "listView1";
+            listViewHistory.Name = "listViewHistory";
             listViewHistory.Size = new Size(721, 97);
             listViewHistory.TabIndex = 4;
             listViewHistory.UseCompatibleStateImageBehavior = false;
             listViewHistory.View = View.Details;
-            listViewHistory.SelectedIndexChanged += listView1_SelectedIndexChanged;
-            listViewHistory.Click += listView1_Click;
+            listViewHistory.SelectedIndexChanged += listViewHistory_SelectedIndexChanged;
+            listViewHistory.Click += listViewHistory_Click;
             // 
-            // textBox2
+            // textBoxSubject
             // 
             textBoxSubject.Location = new Point(141, 93);
-            textBoxSubject.Name = "textBox2";
+            textBoxSubject.Name = "textBoxSubject";
             textBoxSubject.PlaceholderText = "Subject";
             textBoxSubject.Size = new Size(100, 23);
             textBoxSubject.TabIndex = 5;
-            textBoxSubject.Leave += textBox2_Leave;
+            textBoxSubject.Leave += textBoxSubject_Leave;
             // 
-            // textBox3
+            // textBoxStage
             // 
             textBoxStage.Location = new Point(141, 135);
-            textBoxStage.Name = "textBox3";
+            textBoxStage.Name = "textBoxStage";
             textBoxStage.PlaceholderText = "Stage";
             textBoxStage.Size = new Size(100, 23);
             textBoxStage.TabIndex = 5;
-            textBoxStage.Leave += textBox3_Leave;
+            textBoxStage.Leave += textBoxStage_Leave;
  
          
             // 
-            // button2
+            // buttonSettings
             // 
             buttonSettings.Location = new Point(673, 27);
-            buttonSettings.Name = "button2";
+            buttonSettings.Name = "buttonSettings";
             buttonSettings.Size = new Size(64, 45);
             buttonSettings.TabIndex = 0;
             buttonSettings.Text = "settings";
             buttonSettings.UseVisualStyleBackColor = true;
-            buttonSettings.Click += button2_Click;
+            buttonSettings.Click += buttonSettings_Click;
             // 
             // label8
             // 
@@ -127,14 +125,14 @@
             label8.TabIndex = 3;
             label8.Text = "Start time:";
             // 
-            // dateTimePicker1
+            // dateTimePickerHistory
             // 
             dateTimePickerStarttimeCurrent.Format = DateTimePickerFormat.Time;
             dateTimePickerStarttimeCurrent.Location = new Point(547, 78);
-            dateTimePickerStarttimeCurrent.Name = "dateTimePicker1";
+            dateTimePickerStarttimeCurrent.Name = "dateTimePickerHistory";
             dateTimePickerStarttimeCurrent.Size = new Size(200, 23);
             dateTimePickerStarttimeCurrent.TabIndex = 7;
-            dateTimePickerStarttimeCurrent.ValueChanged += dateTimePicker1_ValueChanged;
+            dateTimePickerStarttimeCurrent.ValueChanged += dateTimePickerHistory_ValueChanged;
             
             
             // 
@@ -162,26 +160,22 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 749);
            
-            Controls.Add(listView2);
-            Controls.Add(label12);
-          
-            
             Controls.Add(dateTimePickerStarttimeCurrent);
-           
             Controls.Add(textBoxStage);
             Controls.Add(textBoxSubject);
             Controls.Add(listViewHistory);
-  
-            
-            Controls.Add(label8);
-    
-          
             Controls.Add(labelTimerRunning);
             Controls.Add(textBoxField);
             Controls.Add(buttonSettings);
             Controls.Add(buttonStopStart);
-            Name = "Form1";
-            Text = "Form1";
+
+            Controls.Add(label8);
+            Controls.Add(listView2);
+            Controls.Add(label12);
+
+
+            Name = "TimerApp";
+            Text = "TimerApp";
             Click += Form1_Click;
             ResumeLayout(false);
             PerformLayout();

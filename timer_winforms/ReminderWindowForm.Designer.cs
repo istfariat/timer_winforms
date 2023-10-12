@@ -28,47 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
-            label1 = new Label();
+            buttonStartFromReminder = new Button();
+            labelReminderMsg = new Label();
             SuspendLayout();
             // 
-            // button1
+            // buttonStartFromReminder
             // 
-            button1.Location = new Point(75, 80);
-            button1.Name = "button1";
-            button1.Size = new Size(150, 50);
-            button1.TabIndex = 0;
-            button1.Text = "Start tracking";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            buttonStartFromReminder.Location = new Point(75, 80);
+            buttonStartFromReminder.Name = "buttonStartFromReminder";
+            buttonStartFromReminder.Size = new Size(150, 50);
+            buttonStartFromReminder.TabIndex = 0;
+            buttonStartFromReminder.Text = "Start tracking";
+            buttonStartFromReminder.UseVisualStyleBackColor = true;
+            buttonStartFromReminder.Click += buttonStartFromReminder_Click;
             // 
-            // label1
+            // labelReminderMsg
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(12, 27);
-            label1.Name = "label1";
-            label1.Size = new Size(267, 25);
-            label1.TabIndex = 1;
-            label1.Text = "Dont forget to track your time!";
+            labelReminderMsg.AutoSize = true;
+            labelReminderMsg.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            labelReminderMsg.Location = new Point(12, 27);
+            labelReminderMsg.Name = "labelReminderMsg";
+            labelReminderMsg.Size = new Size(267, 25);
+            labelReminderMsg.TabIndex = 1;
+            labelReminderMsg.Text = "Dont forget to track your time!";
             // 
-            // Form4
+            // ReminderWindowForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(284, 141);
-            Controls.Add(label1);
-            Controls.Add(button1);
-            Name = "Form4";
+            Controls.Add(labelReminderMsg);
+            Controls.Add(buttonStartFromReminder);
+            Name = "ReminderWindowForm";
             StartPosition = FormStartPosition.Manual;
-            Text = "Form4";
+            Text = "ReminderWindowForm";
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Button button1;
-        private Label label1;
+        private Button buttonStartFromReminder;
+        private Label labelReminderMsg;
     }
 }

@@ -16,53 +16,37 @@ namespace timer_winforms
         public int entryIndex;
         private (DateTime startTime, DateTime endTime, TimeSpan duration, string field, string project, string stage) tempEntry;
 
-        //public Form2()
-        //{
-        //    InitializeComponent();
-
-        //    textBox2.Text = Program.history[entryIndex][3];
-        //    textBox3.Text = Program.history[entryIndex][4];
-        //    textBox4.Text = Program.history[entryIndex][5];
-
-        //}
-
         private MainWindowForm mainForm = null;
+        
         public EditEntryWindowForm(Form callingForm)
         {
             mainForm = callingForm as MainWindowForm;
-            InitializeComponent();            
+            InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void textBoxFieldEdit_LostFocus(object sender, EventArgs e)
         {
-            label1.Text = entryIndex.ToString();
-            //int row = mainForm.ListView1.SelectedIndices();
+
         }
 
-
-        private void textBox2_LostFocus(object sender, EventArgs e)
+        private void texttextBoxProjectEditBox3_LostFocus(object sender, EventArgs e)
         {
-            
-        }
 
-        private void textBox3_LostFocus(object sender, EventArgs e)
-        {
-            
         }
 
 
-        private void textBox4_LostFocus(object sender, EventArgs e)
+        private void textBoxStageEdit_LostFocus(object sender, EventArgs e)
         {
-            
+
         }
 
 
-        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
+        private void EditEntryWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            tempEntry.field = textBox2.Text;
-            tempEntry.project = textBox3.Text;
-            tempEntry.stage = textBox4.Text;
-            
+            tempEntry.field = textBoxFieldEdit.Text;
+            tempEntry.project = textBoxProjectEdit.Text;
+            tempEntry.stage = textBoxStageEdit.Text;
+
 
             Program.history[entryIndex] = tempEntry;
 
@@ -70,38 +54,30 @@ namespace timer_winforms
             mainForm.ShowHistory();
         }
 
-        private void Form2_Load(object sender, EventArgs e)
+        private void EditEntryWindow_Load(object sender, EventArgs e)
         {
             tempEntry = Program.history[entryIndex];
 
 
-            textBox2.Text = tempEntry.field;
-            textBox3.Text = tempEntry.project;
-            textBox4.Text = tempEntry.stage;
-            dateTimePicker1.Value = tempEntry.startTime;
-            dateTimePicker2.Value = tempEntry.endTime;
+            textBoxFieldEdit.Text = tempEntry.field;
+            textBoxProjectEdit.Text = tempEntry.project;
+            textBoxStageEdit.Text = tempEntry.stage;
+            dateTimePickerStarttimeEdit.Value = tempEntry.startTime;
+            dateTimePickerEndtimeEdit.Value = tempEntry.endTime;
         }
 
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        private void dateTimePickerStarttimeEdit_ValueChanged(object sender, EventArgs e)
         {
-            tempEntry.startTime = dateTimePicker1.Value;
+            tempEntry.startTime = dateTimePickerStarttimeEdit.Value;
             tempEntry.duration = tempEntry.endTime - tempEntry.startTime;
-            textBox1.Text = tempEntry.duration.ToString();
+            textBoxDurationEdit.Text = tempEntry.duration.ToString();
         }
 
-        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        private void dateTimePickerEndtimeEdit_ValueChanged(object sender, EventArgs e)
         {
-            tempEntry.endTime = dateTimePicker2.Value;
+            tempEntry.endTime = dateTimePickerEndtimeEdit.Value;
             tempEntry.duration = tempEntry.endTime - tempEntry.startTime;
-            textBox1.Text = tempEntry.duration.ToString();
+            textBoxDurationEdit.Text = tempEntry.duration.ToString();
         }
-
-
-        //private void button1_Click(object sender, EventArgs e)
-        //{
-        //    this.mainForm
-        //}
-
-
     }
 }

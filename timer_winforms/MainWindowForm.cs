@@ -119,7 +119,7 @@ namespace timer_winforms
         }
 
         #region Form/Control Events
-        private void StartStopButton_Click(object sender, EventArgs e)
+        private void buttonStopStart_Click(object sender, EventArgs e)
         {
             if (secTimer.Enabled)
             {
@@ -137,7 +137,7 @@ namespace timer_winforms
             set { listViewHistory = value; }
         }
 
-        private void listView1_Click(object sender, EventArgs a)
+        private void listViewHistory_Click(object sender, EventArgs a)
         {
 
             //label7.Text = listView1.SelectedIndices[0].ToString();
@@ -148,7 +148,7 @@ namespace timer_winforms
         }
 
 
-        private void textBox1_Leave(object sender, EventArgs a)
+        private void textBoxField_Leave(object sender, EventArgs a)
         {
             currentEntry.field = textBoxField.Text;
             //label5.Text = currentEntry.field;
@@ -162,22 +162,22 @@ namespace timer_winforms
         //    currentEntry[3] = textBox1.Text;
         //}
 
-        void textBox2_Leave(object sender, EventArgs a)
+        void textBoxSubject_Leave(object sender, EventArgs a)
         {
             currentEntry.project = textBoxSubject.Text;
         }
 
-        void textBox3_Leave(object sender, EventArgs a)
+        void textBoxStage_Leave(object sender, EventArgs a)
         {
             currentEntry.stage = textBoxStage.Text;
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void listViewHistory_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        private void dateTimePickerHistory_ValueChanged(object sender, EventArgs e)
         {
             currentEntry.startTime = dateTimePickerStarttimeCurrent.Value;
         }
@@ -195,7 +195,7 @@ namespace timer_winforms
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonSettings_Click(object sender, EventArgs e)
         {
             //Form3 settingsWindow = new Form3(this);
             SettingsWindowForm settingsWindow = new SettingsWindowForm();
@@ -223,7 +223,7 @@ namespace timer_winforms
 
             currentEntry.duration = DateTime.Now - currentEntry.startTime;
             //label6.Text = ActiveControl.ToString();
-            labelTimerRunning.Text = currentEntry.duration.ToString("c");
+            labelTimerRunning.Text = TimeSpanToString(currentEntry.duration);
             //label5.Text = currentEntry.field;
             //label5.Update();
         }
@@ -368,7 +368,7 @@ namespace timer_winforms
                 {
                     for (int i = 0; i < Program.history.Count; i++)
                     {
-                        sw.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n", Program.history[i].startTime.ToString(), Program.history[i].endTime.ToString(), TimeSpanToString(Program.history[i].duration), Program.history[i].field, Program.history[i].project, Program.history[i].stage);
+                        sw.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n", Program.history[i].startTime.ToString(), Program.history[i].endTime.ToString(), TimeSpanToString(Program.history[i].duration, false), Program.history[i].field, Program.history[i].project, Program.history[i].stage);
                     }
                 }
             }
@@ -392,10 +392,12 @@ namespace timer_winforms
             return result;
         }
 
-        private static string TimeSpanToString(TimeSpan sourceTimeSpan)
+        private static string TimeSpanToString(TimeSpan sourceTimeSpan, bool truncate= true)
         {
             string result = sourceTimeSpan.ToString("c");
-            return result = result.Substring(0, result.Length - 8);
+            int charsToSub = 0;
+            if (truncate) charsToSub = 8;
+            return result = result.Substring(0, result.Length - charsToSub);
         }
 
         #endregion

@@ -28,154 +28,129 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.SuspendLayout();
+            textBoxFieldEdit = new TextBox();
+            textBoxProjectEdit = new TextBox();
+            textBoxStageEdit = new TextBox();
+            labelEndTime = new Label();
+            labelStartTime = new Label();
+            dateTimePickerStarttimeEdit = new DateTimePicker();
+            dateTimePickerEndtimeEdit = new DateTimePicker();
+            textBoxDurationEdit = new TextBox();
+            labelDuration = new Label();
+            SuspendLayout();
             // 
-            // label1
+            // textBoxFieldEdit
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(288, 365);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 15);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "KORG";
+            textBoxFieldEdit.Location = new Point(90, 73);
+            textBoxFieldEdit.Name = "textBoxFieldEdit";
+            textBoxFieldEdit.PlaceholderText = "Field";
+            textBoxFieldEdit.Size = new Size(100, 23);
+            textBoxFieldEdit.TabIndex = 2;
+            textBoxFieldEdit.LostFocus += textBoxFieldEdit_LostFocus;
             // 
-            // button1
+            // textBoxProjectEdit
             // 
-            this.button1.Location = new System.Drawing.Point(277, 383);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            textBoxProjectEdit.Location = new Point(90, 121);
+            textBoxProjectEdit.Name = "textBoxProjectEdit";
+            textBoxProjectEdit.PlaceholderText = "Project";
+            textBoxProjectEdit.Size = new Size(100, 23);
+            textBoxProjectEdit.TabIndex = 2;
+            textBoxProjectEdit.LostFocus += texttextBoxProjectEditBox3_LostFocus;
             // 
-            // textBox2
+            // textBoxStageEdit
             // 
-            this.textBox2.Location = new System.Drawing.Point(90, 73);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.PlaceholderText = "Field";
-            this.textBox2.Size = new System.Drawing.Size(100, 23);
-            this.textBox2.TabIndex = 2;
-            this.textBox2.LostFocus += new System.EventHandler(this.textBox2_LostFocus);
+            textBoxStageEdit.Location = new Point(90, 179);
+            textBoxStageEdit.Name = "textBoxStageEdit";
+            textBoxStageEdit.PlaceholderText = "Stage";
+            textBoxStageEdit.Size = new Size(100, 23);
+            textBoxStageEdit.TabIndex = 2;
+            textBoxStageEdit.LostFocus += textBoxStageEdit_LostFocus;
             // 
-            // textBox3
+            // labelEndTime
             // 
-            this.textBox3.Location = new System.Drawing.Point(90, 121);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.PlaceholderText = "Project";
-            this.textBox3.Size = new System.Drawing.Size(100, 23);
-            this.textBox3.TabIndex = 2;
-            this.textBox3.LostFocus += new System.EventHandler(this.textBox3_LostFocus);
+            labelEndTime.AutoSize = true;
+            labelEndTime.Location = new Point(360, 217);
+            labelEndTime.Name = "labelEndTime";
+            labelEndTime.Size = new Size(54, 15);
+            labelEndTime.TabIndex = 4;
+            labelEndTime.Text = "End time";
             // 
-            // textBox4
+            // labelStartTime
             // 
-            this.textBox4.Location = new System.Drawing.Point(90, 179);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.PlaceholderText = "Stage";
-            this.textBox4.Size = new System.Drawing.Size(100, 23);
-            this.textBox4.TabIndex = 2;
-            this.textBox4.LostFocus += new System.EventHandler(this.textBox4_LostFocus);
+            labelStartTime.AutoSize = true;
+            labelStartTime.Location = new Point(350, 28);
+            labelStartTime.Name = "labelStartTime";
+            labelStartTime.Size = new Size(58, 15);
+            labelStartTime.TabIndex = 4;
+            labelStartTime.Text = "Start time";
             // 
-            // label2
+            // dateTimePickerStarttimeEdit
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(360, 217);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(54, 15);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "End time";
+            dateTimePickerStarttimeEdit.Format = DateTimePickerFormat.Time;
+            dateTimePickerStarttimeEdit.Location = new Point(370, 46);
+            dateTimePickerStarttimeEdit.Name = "dateTimePickerStarttimeEdit";
+            dateTimePickerStarttimeEdit.Size = new Size(123, 23);
+            dateTimePickerStarttimeEdit.TabIndex = 5;
+            dateTimePickerStarttimeEdit.ValueChanged += dateTimePickerStarttimeEdit_ValueChanged;
             // 
-            // label3
+            // dateTimePickerEndtimeEdit
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(350, 28);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(58, 15);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Start time";
+            dateTimePickerEndtimeEdit.Format = DateTimePickerFormat.Time;
+            dateTimePickerEndtimeEdit.Location = new Point(370, 248);
+            dateTimePickerEndtimeEdit.Name = "dateTimePickerEndtimeEdit";
+            dateTimePickerEndtimeEdit.Size = new Size(123, 23);
+            dateTimePickerEndtimeEdit.TabIndex = 5;
+            dateTimePickerEndtimeEdit.ValueChanged += dateTimePickerEndtimeEdit_ValueChanged;
             // 
-            // dateTimePicker1
+            // textBoxDurationEdit
             // 
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePicker1.Location = new System.Drawing.Point(370, 46);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(123, 23);
-            this.dateTimePicker1.TabIndex = 5;
-            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
+            textBoxDurationEdit.Location = new Point(562, 164);
+            textBoxDurationEdit.Name = "textBoxDurationEdit";
+            textBoxDurationEdit.Size = new Size(100, 23);
+            textBoxDurationEdit.TabIndex = 6;
             // 
-            // dateTimePicker2
+            // labelabelDurationl4
             // 
-            this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePicker2.Location = new System.Drawing.Point(370, 248);
-            this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(123, 23);
-            this.dateTimePicker2.TabIndex = 5;
-            this.dateTimePicker2.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
+            labelDuration.AutoSize = true;
+            labelDuration.Location = new Point(546, 129);
+            labelDuration.Name = "labelDuration";
+            labelDuration.Size = new Size(52, 15);
+            labelDuration.TabIndex = 4;
+            labelDuration.Text = "duration";
             // 
-            // textBox1
+            // EditEntryWindow
             // 
-            this.textBox1.Location = new System.Drawing.Point(562, 164);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 23);
-            this.textBox1.TabIndex = 6;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(546, 129);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(52, 15);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "duration";
-            // 
-            // Form2
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.dateTimePicker2);
-            this.Controls.Add(this.dateTimePicker1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label1);
-            this.Name = "Form2";
-            this.Text = "Form2";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
-            this.Load += new System.EventHandler(this.Form2_Load);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(textBoxDurationEdit);
+            Controls.Add(dateTimePickerEndtimeEdit);
+            Controls.Add(dateTimePickerStarttimeEdit);
+            Controls.Add(labelStartTime);
+            Controls.Add(labelDuration);
+            Controls.Add(labelEndTime);
+            Controls.Add(textBoxStageEdit);
+            Controls.Add(textBoxProjectEdit);
+            Controls.Add(textBoxFieldEdit);
+            Name = "EditEntryWindow";
+            Text = "EditEntryWindow";
+            FormClosing += EditEntryWindow_FormClosing;
+            Load += EditEntryWindow_Load;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        private Label label1;
-        private Button button1;
-        protected TextBox textBox2;
-        private TextBox textBox3;
-        private TextBox textBox4;
-        private Label label2;
-        private Label label3;
-        private DateTimePicker dateTimePicker1;
-        private DateTimePicker dateTimePicker2;
-        private TextBox textBox1;
-        private Label label4;
+
+        protected TextBox textBoxFieldEdit;
+        private TextBox textBoxProjectEdit;
+        private TextBox textBoxStageEdit;
+        private Label labelEndTime;
+        private Label labelStartTime;
+        private DateTimePicker dateTimePickerStarttimeEdit;
+        private DateTimePicker dateTimePickerEndtimeEdit;
+        private TextBox textBoxDurationEdit;
+        private Label labelDuration;
     }
 }
