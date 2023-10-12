@@ -1,6 +1,6 @@
 ﻿namespace timer_winforms
 {
-    partial class Form4
+    partial class ReminderWindowForm
     {
         /// <summary>
         /// Required designer variable.

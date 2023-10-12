@@ -6,7 +6,7 @@ using System.Text;
 
 namespace timer_winforms
 {
-    public partial class Form1 : Form
+    public partial class MainWindowForm : Form
     {
 
         //static Stopwatch mainTimer = new Stopwatch();
@@ -24,6 +24,7 @@ namespace timer_winforms
 
 
         WinEventDelegate dele = null;
+        WinEventDelegate newDele = null;
 
         delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
 
@@ -32,6 +33,9 @@ namespace timer_winforms
 
         private const uint WINEVENT_OUTOFCONTEXT = 0;
         private const uint EVENT_SYSTEM_FOREGROUND = 3;
+
+
+
 
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
@@ -67,6 +71,11 @@ namespace timer_winforms
                 listView2.Items.Add(Buff.ToString());
                 //byte[] textBytes = Encoding.UTF8.GetBytes(Buff.ToString());
                 //return Encoding.UTF8.GetString(textBytes);
+                //using (StreamWriter sw = new StreamWriter("G:\\Projects\\Sharping\\Timer (cons)\\savefiles\\progs.txt", true))
+                //{
+                //    sw.Write("{0}\n", Buff.ToString());
+                //}
+
                 return Buff.ToString();
             }
             UnhookWinEvent(handle);
@@ -78,17 +87,20 @@ namespace timer_winforms
         public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             label12.Text = GetActiveWindowTitle();
+
         }
 
-        public Form1()
+        public MainWindowForm()
         {
             InitializeComponent();
             ShowHistory();
 
 
             secTimer.Interval = 100;            //0.1s
-            reminderTimer.Interval = 10000;     //10s
+            reminderTimer.Interval = 20 * 1000;     //20s
             inactivityTimer.Interval = idleInterval;
+
+
 
             reminderTimer.Tick += reminderTimer_Tick;
             secTimer.Tick += secTimer_Tick;
@@ -98,16 +110,16 @@ namespace timer_winforms
             inactivityTimer.Start();
 
             listView2.Columns.Add("Program", 400, HorizontalAlignment.Center);
-            label5.Text = "ололо";
-            label11.Text = inactivityTimer.Interval.ToString();
+           
 
             dele = new WinEventDelegate(WinEventProc);
             IntPtr m_hhook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
 
+
         }
 
         #region Form/Control Events
-        private void button1_Click(object sender, EventArgs e)
+        private void StartStopButton_Click(object sender, EventArgs e)
         {
             if (secTimer.Enabled)
             {
@@ -121,8 +133,8 @@ namespace timer_winforms
 
         public ListView ListView1
         {
-            get { return listView1; }
-            set { listView1 = value; }
+            get { return listViewHistory; }
+            set { listViewHistory = value; }
         }
 
         private void listView1_Click(object sender, EventArgs a)
@@ -130,15 +142,15 @@ namespace timer_winforms
 
             //label7.Text = listView1.SelectedIndices[0].ToString();
             //label6.Text = (Program.history.Count - listView1.SelectedIndices[0] - 1).ToString();
-            Form2 editWindow = new Form2(this);
-            editWindow.entryIndex = Program.history.Count - listView1.SelectedIndices[0] - 1;
+            EditEntryWindowForm editWindow = new EditEntryWindowForm(this);
+            editWindow.entryIndex = Program.history.Count - listViewHistory.SelectedIndices[0] - 1;
             editWindow.Show();
         }
 
 
         private void textBox1_Leave(object sender, EventArgs a)
         {
-            currentEntry.field = textBox1.Text;
+            currentEntry.field = textBoxField.Text;
             //label5.Text = currentEntry.field;
         }
 
@@ -152,12 +164,12 @@ namespace timer_winforms
 
         void textBox2_Leave(object sender, EventArgs a)
         {
-            currentEntry.project = textBox2.Text;
+            currentEntry.project = textBoxSubject.Text;
         }
 
         void textBox3_Leave(object sender, EventArgs a)
         {
-            currentEntry.stage = textBox3.Text;
+            currentEntry.stage = textBoxStage.Text;
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -167,16 +179,16 @@ namespace timer_winforms
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
-            currentEntry.startTime = dateTimePicker1.Value;
+            currentEntry.startTime = dateTimePickerStarttimeCurrent.Value;
         }
 
 
         [DllImport("user32")]
         private static extern bool HideCaret(IntPtr hWnd);
-        private void textBox4_GotFocus(object sender, EventArgs e)
-        {
-            HideCaret(textBox4.Handle);
-        }
+        //private void textBox4_GotFocus(object sender, EventArgs e)
+        //{
+        //    HideCaret(textBox4.Handle);
+        //}
 
         private void textBox4_Enter(object sender, EventArgs e)
         {
@@ -186,14 +198,9 @@ namespace timer_winforms
         private void button2_Click(object sender, EventArgs e)
         {
             //Form3 settingsWindow = new Form3(this);
-            Form3 settingsWindow = new Form3();
+            SettingsWindowForm settingsWindow = new SettingsWindowForm();
             //settingsWindow.entryIndex = Program.history.Count - listView1.SelectedIndices[0] - 1;
             settingsWindow.Show();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            label9.Text = "pressed";
         }
 
         private void Form1_Click(object sender, EventArgs e)
@@ -204,7 +211,7 @@ namespace timer_winforms
 
         void reminderTimer_Tick(object sender, EventArgs a)
         {
-            Form4 reminderWindow = new Form4(this);
+            ReminderWindowForm reminderWindow = new ReminderWindowForm(this);
             reminderWindow.Show();
         }
 
@@ -216,7 +223,7 @@ namespace timer_winforms
 
             currentEntry.duration = DateTime.Now - currentEntry.startTime;
             //label6.Text = ActiveControl.ToString();
-            label2.Text = currentEntry.duration.ToString("c");
+            labelTimerRunning.Text = currentEntry.duration.ToString("c");
             //label5.Text = currentEntry.field;
             //label5.Update();
         }
@@ -267,8 +274,8 @@ namespace timer_winforms
             secTimer.Start();
 
             currentEntry.startTime = DateTime.Now;
-            dateTimePicker1.Value = currentEntry.startTime;
-            label9.Text = "";                                       // PLACEHOLDER
+            dateTimePickerStarttimeCurrent.Value = currentEntry.startTime;
+           
 
         }
 
@@ -281,23 +288,23 @@ namespace timer_winforms
             currentEntry.duration = currentEntry.endTime - currentEntry.startTime;
             Program.history.Add(currentEntry);
 
-            label2.Text = TimeSpanToString(currentEntry.duration);
+            labelTimerRunning.Text = TimeSpanToString(currentEntry.duration);
 
             SaveEntry(true);
             ShowHistory();
 
-            textBox1.Clear();
-            textBox2.Clear();
-            textBox3.Clear();
+            textBoxField.Clear();
+            textBoxSubject.Clear();
+            textBoxStage.Clear();
         }
 
         public void ShowHistory()
         {
-            listView1.Clear();
+            listViewHistory.Clear();
             LoadEntry();
 
             for (int j = 0; j < Program.fields.Length; j++)
-                listView1.Columns.Add(Program.fields[j], 100, HorizontalAlignment.Center);
+                listViewHistory.Columns.Add(Program.fields[j], 100, HorizontalAlignment.Center);
 
 
             for (int i = Program.history.Count - 1; i >= 0; i--)
@@ -305,7 +312,7 @@ namespace timer_winforms
                 //foreach (var x in Program.history[i])
                 //    listView1.x.
                 //listView1.Items.Add(new ListViewItem(Program.history[i].ToString())); // ??????
-                listView1.Items.Add(new ListViewItem(new string[] { Program.history[i].startTime.ToString(), Program.history[i].endTime.ToString(),
+                listViewHistory.Items.Add(new ListViewItem(new string[] { Program.history[i].startTime.ToString(), Program.history[i].endTime.ToString(),
                                                                                     Program.history[i].duration.ToString(), Program.history[i].field,
                                                                                     Program.history[i].project, Program.history[i].stage }));
             }

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace timer_winforms
 {
-    public partial class Form2 : Form
+    public partial class EditEntryWindowForm : Form
     {
 
         public int entryIndex;
@@ -26,10 +26,10 @@ namespace timer_winforms
 
         //}
 
-        private Form1 mainForm = null;
-        public Form2(Form callingForm)
+        private MainWindowForm mainForm = null;
+        public EditEntryWindowForm(Form callingForm)
         {
-            mainForm = callingForm as Form1;
+            mainForm = callingForm as MainWindowForm;
             InitializeComponent();            
         }
 

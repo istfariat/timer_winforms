@@ -11,9 +11,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace timer_winforms
 {
-    public partial class Form3 : Form
+    public partial class SettingsWindowForm : Form
     {
-        public Form3()
+        public SettingsWindowForm()
         {
             InitializeComponent();
         }
@@ -23,7 +23,7 @@ namespace timer_winforms
 
         }
 
-        private void Form3_Load(object sender, EventArgs e)
+        private void SettingsWindowForm_Load(object sender, EventArgs e)
         {
             //dataGridView1 = new DataGridView();
             dataGridView1.Rows[dataGridView1.Rows.Add()].Cells[0].Value = "Save history to:";

@@ -1,6 +1,6 @@
 ﻿namespace timer_winforms
 {
-    partial class Form3
+    partial class SettingsWindowForm
     {
         /// <summary>
         /// Required designer variable.
@@ -101,9 +101,9 @@
             Controls.Add(panel1);
             Controls.Add(button1);
             Controls.Add(dataGridView1);
-            Name = "Form3";
-            Text = "Form3";
-            Load += Form3_Load;
+            Name = "Settings";
+            Text = "Settings";
+            Load += SettingsWindowForm_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             panel1.ResumeLayout(false);
             ResumeLayout(false);

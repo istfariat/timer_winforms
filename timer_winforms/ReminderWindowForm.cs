@@ -10,14 +10,14 @@ using System.Windows.Forms;
 
 namespace timer_winforms
 {
-    public partial class Form4 : Form
+    public partial class ReminderWindowForm : Form
     {
         static System.Windows.Forms.Timer closeTimer = new System.Windows.Forms.Timer();
 
-        private Form1 mainForm = null;
-        public Form4(Form callingForm)
+        private MainWindowForm mainForm = null;
+        public ReminderWindowForm(Form callingForm)
         {
-            mainForm = callingForm as Form1;
+            mainForm = callingForm as MainWindowForm;
             InitializeComponent();
 
             closeTimer.Interval = 5000;

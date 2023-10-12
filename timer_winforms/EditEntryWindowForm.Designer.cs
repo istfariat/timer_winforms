@@ -1,6 +1,6 @@
 ﻿namespace timer_winforms
 {
-    partial class Form2
+    partial class EditEntryWindowForm
     {
         /// <summary>
         /// Required designer variable.
