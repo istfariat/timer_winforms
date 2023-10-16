@@ -48,15 +48,15 @@ namespace timer_winforms
             tempEntry.stage = textBoxStageEdit.Text;
 
 
-            Program.history[entryIndex] = tempEntry;
+            TimeTracker.history[entryIndex] = tempEntry;
 
-            mainForm.SaveEntry();
+            TimeTracker.SaveEntry();
             mainForm.ShowHistory();
         }
 
         private void EditEntryWindow_Load(object sender, EventArgs e)
         {
-            tempEntry = Program.history[entryIndex];
+            tempEntry = TimeTracker.history[entryIndex];
 
 
             textBoxFieldEdit.Text = tempEntry.field;

@@ -82,7 +82,6 @@
             listViewHistory.TabIndex = 4;
             listViewHistory.UseCompatibleStateImageBehavior = false;
             listViewHistory.View = View.Details;
-            listViewHistory.SelectedIndexChanged += listViewHistory_SelectedIndexChanged;
             listViewHistory.Click += listViewHistory_Click;
             // 
             // textBoxSubject
