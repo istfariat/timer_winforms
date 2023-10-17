@@ -13,11 +13,9 @@ namespace timer_winforms
     public partial class ReminderWindowForm : Form
     {
         static System.Windows.Forms.Timer closeTimer = new System.Windows.Forms.Timer();
-
-        private MainWindowForm mainForm = null;
-        public ReminderWindowForm(Form callingForm)
+                
+        public ReminderWindowForm()
         {
-            mainForm = callingForm as MainWindowForm;
             InitializeComponent();
 
             closeTimer.Interval = 5000;

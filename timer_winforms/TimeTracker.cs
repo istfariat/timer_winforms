@@ -21,95 +21,25 @@ public class TimeTracker
     public static string pathToSave = "G:\\Projects\\Sharping\\Timer (cons)\\savefiles\\timerhistory.txt";
     public static string settingsPath = "G:\\Projects\\Sharping\\Timer (cons)\\savefiles\\settings.txt";
     static bool END_TIME_SHIFT;
-    public static int IDLE_INTERVAL = 5 * 60 * 1000; //user value in min to ms
+    public static int IDLE_INTERVAL = 1 * 60 * 1000; //user value in min to ms
 
     public delegate void TrackerHandler();
     public static event TrackerHandler UserIdle;
-    public static event TrackerHandler ActiveWindowChange;
     public static event TrackerHandler NewEntryAdded;
 
-    private const uint WINEVENT_OUTOFCONTEXT = 0;
-    private const uint EVENT_SYSTEM_FOREGROUND = 3;
-    public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
-    static WinEventDelegate dele = null;
-
-
+    
     public static void DefineTimers()
     {
         mainTimer.Interval = 100;            //0.1s
         reminderTimer.Interval = 20 * 1000;     //20s
         idleTimer.Interval = IDLE_INTERVAL;
 
-
         reminderTimer.Tick += reminderTimer_Tick;
         mainTimer.Tick += mainTimer_Tick;
         idleTimer.Tick += idleTimer_Tick;
-
-
-
-
-        dele = new WinEventDelegate(WinEventProc);
-        IntPtr m_hhook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
     }
 
-
-    //public struct TimeEntry
-    //{
-    //    public DateTime startTime;
-    //    public DateTime endTime;
-    //    public TimeSpan duration;
-    //    public string field;
-    //    public string project;
-    //    public string stage;
-    //}
-
-
-    
-
-    [DllImport("user32.dll")]
-    public static extern bool UnhookWinEvent(IntPtr hWinEventHook);
-
-
-    [DllImport("user32.dll")]
-    public static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
-
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetForegroundWindow();
-
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-    public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-
-    [DllImport("user32.dll")]
-    public static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
-
-    public struct LASTINPUTINFO
-    {
-        public uint Size;
-        public uint Time;
-    }
-
-
-    public static string GetActiveWindowTitle()
-    {
-        const int nChars = 256;
-        IntPtr handle = IntPtr.Zero;
-        StringBuilder Buff = new StringBuilder(nChars);
-        handle = GetForegroundWindow();
-
-        if (GetWindowText(handle, Buff, nChars) > 0)
-        {
-            UnhookWinEvent(handle);
-            return Buff.ToString();
-        }
-        UnhookWinEvent(handle);
-        return null;
-    }
-
-    public static void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
-    {
-        ActiveWindowChange?.Invoke();
-    }
-
+   
     static void reminderTimer_Tick(object sender, EventArgs a)
     {
 
@@ -126,16 +56,15 @@ public class TimeTracker
 
     static void idleTimer_Tick(object sender, EventArgs a)
     {
-        LASTINPUTINFO lastActive = new LASTINPUTINFO();
-        lastActive.Size = (uint)Marshal.SizeOf(lastActive);
-        uint eventTicks = (uint)Environment.TickCount;
+        CheckIdleStatus();
 
+    }
 
-        if (GetLastInputInfo(ref lastActive))
+    public static void CheckIdleStatus()
+    {
+        if (PlatformWin.test())
         {
-            uint lastInput = lastActive.Time;
-            uint idleTime = eventTicks - lastInput;
-            int idleTemp = IDLE_INTERVAL - (int)idleTime;
+            int idleTemp = IDLE_INTERVAL - (int)PlatformWin.idleTime;
             if (idleTemp > 0)
                 idleTimer.Interval = idleTemp;
             else
@@ -145,6 +74,12 @@ public class TimeTracker
                 idleTimer.Stop();
             }
         }
+    }
+
+
+    public static string CheckActiveWindow()
+    {
+        return PlatformWin.GetActiveWindowTitle();
     }
 
 

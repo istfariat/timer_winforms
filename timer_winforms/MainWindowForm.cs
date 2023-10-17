@@ -15,13 +15,14 @@ namespace timer_winforms
             ShowHistory();
 
             TimeTracker.DefineTimers();
+            PlatformWin.ActivateWindowTrack();
 
             TimeTracker.reminderTimer.Tick += reminderTimer_Tick;
             TimeTracker.UserIdle += ShowIdleWindow;
             TimeTracker.mainTimer.Tick += ShowRunningTime;
 
-            
-            TimeTracker.ActiveWindowChange += ShowActiveWindow;
+
+            PlatformWin.ActiveWindowChange += ShowActiveWindow;
             TimeTracker.NewEntryAdded += ShowHistory;
 
             TimeTracker.reminderTimer.Start();
@@ -37,7 +38,7 @@ namespace timer_winforms
 
         void ShowActiveWindow()
         {
-            string currentWindow = TimeTracker.GetActiveWindowTitle();
+            string currentWindow = PlatformWin.GetActiveWindowTitle();
             label12.Text = currentWindow;
             listView2.Items.Add(currentWindow);
         }
@@ -86,21 +87,10 @@ namespace timer_winforms
 
         private void dateTimePickerHistory_ValueChanged(object sender, EventArgs e)
         {
-            TimeTracker.currentEntry.startTime = dateTimePickerStarttimeCurrent.Value;
+            TimeTracker.EditCurrStart(dateTimePickerStarttimeCurrent.Value);
+            dateTimePickerStarttimeCurrent.Value = TimeTracker.currentEntry.startTime;
         }
 
-
-        [DllImport("user32")]
-        private static extern bool HideCaret(IntPtr hWnd);
-        //private void textBox4_GotFocus(object sender, EventArgs e)
-        //{
-        //    HideCaret(textBox4.Handle);
-        //}
-
-        private void textBox4_Enter(object sender, EventArgs e)
-        {
-
-        }
 
         private void buttonSettings_Click(object sender, EventArgs e)
         {
@@ -116,7 +106,7 @@ namespace timer_winforms
 
         void reminderTimer_Tick(object sender, EventArgs a)
         {
-            ReminderWindowForm reminderWindow = new ReminderWindowForm(this);
+            ReminderWindowForm reminderWindow = new ReminderWindowForm();
             reminderWindow.Show();
         }
 
