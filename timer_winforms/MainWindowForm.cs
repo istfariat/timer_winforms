@@ -24,6 +24,7 @@ namespace timer_winforms
 
             PlatformWin.ActiveWindowChange += ShowActiveWindow;
             TimeTracker.NewEntryAdded += ShowHistory;
+            IdleNotificationWindowForm.DiscardTime += DiscardEntry;
 
             TimeTracker.reminderTimer.Start();
             //inactivityTimer.Start();
@@ -34,6 +35,20 @@ namespace timer_winforms
 
 
         #region Form/Control Events
+
+        private void ResetFields()
+        {
+            labelTimerRunning.Text = "00:00:00";
+            textBoxField.Text = string.Empty;
+            textBoxSubject.Text = string.Empty;
+            textBoxStage.Text = string.Empty;
+        }
+
+        private void DiscardEntry()
+        {
+            TimeTracker.StoptMainTimer(true);
+            ResetFields();
+        }
 
 
         void ShowActiveWindow()
@@ -48,10 +63,14 @@ namespace timer_winforms
             if (TimeTracker.mainTimer.Enabled)
             {
                 TimeTracker.StoptMainTimer();
+                ResetFields();
             }
             else
             {
                 TimeTracker.StartMainTimer();
+                TimeTracker.currentEntry.field = textBoxField.Text;
+                TimeTracker.currentEntry.project = textBoxSubject.Text;
+                TimeTracker.currentEntry.stage = textBoxStage.Text;
             }
         }
 
@@ -132,9 +151,8 @@ namespace timer_winforms
             listViewHistory.Clear();
             TimeTracker.LoadEntry();
 
-            for (int j = 0; j < TimeTracker.fields.Length; j++)
-                listViewHistory.Columns.Add(TimeTracker.fields[j], 100, HorizontalAlignment.Center);
-
+            foreach (var field in TimeTracker.fields)
+                listViewHistory.Columns.Add(field, 100, HorizontalAlignment.Center);
 
             for (int i = TimeTracker.history.Count - 1; i >= 0; i--)
             {

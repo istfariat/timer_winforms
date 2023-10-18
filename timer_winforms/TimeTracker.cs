@@ -8,13 +8,15 @@ public class TimeTracker
     
     public static List<(DateTime startTime, DateTime endTime, TimeSpan duration, string field, string project, string stage)> history = new List<(DateTime, DateTime, TimeSpan, string, string, string)>();
     public static string[] fields = new string[6] { "Time started:\t", "Time ended:\t", "Duration:\t", "Field:\t\t", "Project:\t", "Stage:\t\t" };
-    public static List<string>[] knownNames = new List<string>[3];
+
+    //public static List<string>[] knownNames = new List<string>[3];
+
     public static (DateTime startTime, DateTime endTime, TimeSpan duration, string field, string project, string stage) currentEntry;
 
     public static System.Windows.Forms.Timer mainTimer = new System.Windows.Forms.Timer();
     public static System.Windows.Forms.Timer reminderTimer = new System.Windows.Forms.Timer();
     public static System.Windows.Forms.Timer idleTimer = new System.Windows.Forms.Timer();
-    public static System.Windows.Forms.Timer trashholdTimer = new System.Windows.Forms.Timer();
+    //public static System.Windows.Forms.Timer trashholdTimer = new System.Windows.Forms.Timer();
 
 
 
@@ -22,6 +24,7 @@ public class TimeTracker
     public static string settingsPath = "G:\\Projects\\Sharping\\Timer (cons)\\savefiles\\settings.txt";
     static bool END_TIME_SHIFT;
     public static int IDLE_INTERVAL = 1 * 60 * 1000; //user value in min to ms
+    //public static int TRASHHOLD_INTERVAL = 5 * 1000; //user value in sec to ms
 
     public delegate void TrackerHandler();
     public static event TrackerHandler UserIdle;
@@ -33,13 +36,22 @@ public class TimeTracker
         mainTimer.Interval = 100;            //0.1s
         reminderTimer.Interval = 20 * 1000;     //20s
         idleTimer.Interval = IDLE_INTERVAL;
+        //trashholdTimer.Interval = TRASHHOLD_INTERVAL;
 
         reminderTimer.Tick += reminderTimer_Tick;
         mainTimer.Tick += mainTimer_Tick;
         idleTimer.Tick += idleTimer_Tick;
+
+        //IdleNotificationWindowForm.DiscardTime += DiscardTimer;
     }
 
    
+    public static void DiscardTimer()
+    {
+        StoptMainTimer(true);
+    }
+
+
     static void reminderTimer_Tick(object sender, EventArgs a)
     {
 
@@ -62,7 +74,7 @@ public class TimeTracker
 
     public static void CheckIdleStatus()
     {
-        if (PlatformWin.test())
+        if (PlatformWin.CheckIdle())
         {
             int idleTemp = IDLE_INTERVAL - (int)PlatformWin.idleTime;
             if (idleTemp > 0)
@@ -92,7 +104,7 @@ public class TimeTracker
         currentEntry.startTime = DateTime.Now;
     }
 
-    public static void StoptMainTimer()
+    public static void StoptMainTimer(bool discard = false)
     {
         mainTimer.Stop();
         idleTimer.Stop();
@@ -100,10 +112,15 @@ public class TimeTracker
 
         currentEntry.endTime = DateTime.Now;
         currentEntry.duration = currentEntry.endTime - currentEntry.startTime;
-        
-        history.Add(currentEntry);
 
-        SaveEntry(true);
+
+
+        if (!discard)
+        {
+            history.Add(currentEntry);
+            SaveEntry(true);
+        }
+        
     }
 
     public static void SortEntries()
@@ -125,9 +142,9 @@ public class TimeTracker
         {
             using (StreamWriter sw = new StreamWriter(pathToSave, append))
             {
-                for (int i = 0; i < history.Count; i++)
+                foreach (var entry in history)
                 {
-                    sw.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n", history[i].startTime.ToString(), history[i].endTime.ToString(), TimeSpanToString(history[i].duration, false), history[i].field, history[i].project, history[i].stage);
+                    sw.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n", entry.startTime.ToString(), entry.endTime.ToString(), TimeSpanToString(entry.duration, false), entry.field, entry.project, entry.stage);
                 }
             }
         }

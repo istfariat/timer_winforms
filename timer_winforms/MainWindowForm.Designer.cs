@@ -37,7 +37,7 @@
             listViewHistory = new ListView();
             dateTimePickerStarttimeCurrent = new DateTimePicker();
 
-            label8 = new Label();
+            labelStarttime = new Label();
             label12 = new Label();
             listView2 = new ListView();
             
@@ -114,21 +114,21 @@
             buttonSettings.UseVisualStyleBackColor = true;
             buttonSettings.Click += buttonSettings_Click;
             // 
-            // label8
+            // labelStarttime
             // 
-            label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
-            label8.Location = new Point(440, 73);
-            label8.Name = "label8";
-            label8.Size = new Size(101, 28);
-            label8.TabIndex = 3;
-            label8.Text = "Start time:";
+            labelStarttime.AutoSize = true;
+            labelStarttime.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
+            labelStarttime.Location = new Point(440, 73);
+            labelStarttime.Name = "labelStarttime";
+            labelStarttime.Size = new Size(101, 28);
+            labelStarttime.TabIndex = 3;
+            labelStarttime.Text = "Start time:";
             // 
-            // dateTimePickerHistory
+            // dateTimePickerCurrent
             // 
             dateTimePickerStarttimeCurrent.Format = DateTimePickerFormat.Time;
             dateTimePickerStarttimeCurrent.Location = new Point(547, 78);
-            dateTimePickerStarttimeCurrent.Name = "dateTimePickerHistory";
+            dateTimePickerStarttimeCurrent.Name = "dateTimePickerCurrent";
             dateTimePickerStarttimeCurrent.Size = new Size(200, 23);
             dateTimePickerStarttimeCurrent.TabIndex = 7;
             dateTimePickerStarttimeCurrent.ValueChanged += dateTimePickerHistory_ValueChanged;
@@ -168,7 +168,7 @@
             Controls.Add(buttonSettings);
             Controls.Add(buttonStopStart);
 
-            Controls.Add(label8);
+            Controls.Add(labelStarttime);
             Controls.Add(listView2);
             Controls.Add(label12);
 
@@ -191,7 +191,7 @@
         private Label labelTimerRunning;
         private ListView listViewHistory;
        
-        private Label label8;     
+        private Label labelStarttime;     
         private Label label12;
         private ListView listView2;
       

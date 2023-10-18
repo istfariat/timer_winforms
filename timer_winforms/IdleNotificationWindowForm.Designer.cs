@@ -28,12 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            labelIdleMsg = new Label();
+            buttonIdleContinueEntry = new Button();
+            buttonIdleDiscardEntry = new Button();
+            SuspendLayout();
+            // 
+            // labelIdleMsg
+            // 
+            labelIdleMsg.AutoSize = true;
+            labelIdleMsg.Location = new Point(25, 52);
+            labelIdleMsg.Name = "labelIdleMsg";
+            labelIdleMsg.Size = new Size(184, 15);
+            labelIdleMsg.TabIndex = 0;
+            labelIdleMsg.Text = "You were idle since 12:00 (17 min)";
+            labelIdleMsg.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // buttonIdleContinueEntry
+            // 
+            buttonIdleContinueEntry.Location = new Point(53, 146);
+            buttonIdleContinueEntry.Name = "buttonIdleContinueEntry";
+            buttonIdleContinueEntry.Size = new Size(129, 38);
+            buttonIdleContinueEntry.TabIndex = 1;
+            buttonIdleContinueEntry.Text = "Continue entry";
+            buttonIdleContinueEntry.UseVisualStyleBackColor = true;
+            buttonIdleContinueEntry.Click += buttonIdleContinueEntry_Click;
+            // 
+            // buttonIdleDiscardEntry
+            // 
+            buttonIdleDiscardEntry.Location = new Point(53, 190);
+            buttonIdleDiscardEntry.Name = "buttonIdleDiscardEntry";
+            buttonIdleDiscardEntry.Size = new Size(129, 39);
+            buttonIdleDiscardEntry.TabIndex = 2;
+            buttonIdleDiscardEntry.Text = "Discard entry";
+            buttonIdleDiscardEntry.UseVisualStyleBackColor = true;
+            buttonIdleDiscardEntry.Click += buttonIdleDiscardEntry_Click;
+            // 
+            // IdleNotificationWindowForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(236, 401);
+            Controls.Add(buttonIdleDiscardEntry);
+            Controls.Add(buttonIdleContinueEntry);
+            Controls.Add(labelIdleMsg);
+            Name = "IdleNotificationWindowForm";
             Text = "IdleNotificationForm";
+            FormClosing += IdleNotificationWindowForm_FormClosing;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private Label labelIdleMsg;
+        private Button buttonIdleContinueEntry;
+        private Button buttonIdleDiscardEntry;
     }
 }
