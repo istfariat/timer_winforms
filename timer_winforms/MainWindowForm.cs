@@ -15,7 +15,8 @@ namespace timer_winforms
             ShowHistory();
 
             TimeTracker.DefineTimers();
-            PlatformWin.ActivateWindowTrack();
+            PlatformWin.DefineTimer();
+            //PlatformWin.ActivateWindowTrack();
 
             TimeTracker.reminderTimer.Tick += reminderTimer_Tick;
             TimeTracker.UserIdle += ShowIdleWindow;
@@ -27,8 +28,8 @@ namespace timer_winforms
             IdleNotificationWindowForm.DiscardTime += DiscardEntry;
 
             TimeTracker.reminderTimer.Start();
-            //inactivityTimer.Start();
 
+            buttonDelete.Hide();
             listView2.Columns.Add("Program", 400, HorizontalAlignment.Center);
         }
 
@@ -44,9 +45,9 @@ namespace timer_winforms
             textBoxStage.Text = string.Empty;
         }
 
-        private void DiscardEntry()
+        private void DiscardEntry(double idleTimeSeconds)
         {
-            TimeTracker.StoptMainTimer(true);
+            TimeTracker.StoptMainTimer(false, idleTimeSeconds);
             ResetFields();
         }
 
@@ -64,6 +65,7 @@ namespace timer_winforms
             {
                 TimeTracker.StoptMainTimer();
                 ResetFields();
+                buttonDelete.Hide();
             }
             else
             {
@@ -71,6 +73,7 @@ namespace timer_winforms
                 TimeTracker.currentEntry.field = textBoxField.Text;
                 TimeTracker.currentEntry.project = textBoxSubject.Text;
                 TimeTracker.currentEntry.stage = textBoxStage.Text;
+                buttonDelete.Show();
             }
         }
 
@@ -156,7 +159,7 @@ namespace timer_winforms
 
             for (int i = TimeTracker.history.Count - 1; i >= 0; i--)
             {
-                
+
                 listViewHistory.Items.Add(new ListViewItem(new string[] { TimeTracker.history[i].startTime.ToString(), TimeTracker.history[i].endTime.ToString(),
                                                                                     TimeTracker.history[i].duration.ToString(), TimeTracker.history[i].field,
                                                                                     TimeTracker.history[i].project, TimeTracker.history[i].stage }));
@@ -165,5 +168,12 @@ namespace timer_winforms
         }
 
         #endregion
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            TimeTracker.DeleteRunningEntry();            
+            ResetFields();
+            buttonDelete.Hide();
+        }
     }
 }

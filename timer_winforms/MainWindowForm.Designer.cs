@@ -36,11 +36,10 @@
             labelTimerRunning = new Label();
             listViewHistory = new ListView();
             dateTimePickerStarttimeCurrent = new DateTimePicker();
-
             labelStarttime = new Label();
             label12 = new Label();
             listView2 = new ListView();
-            
+            buttonDelete = new Button();
             SuspendLayout();
             // 
             // buttonStopStart
@@ -53,6 +52,16 @@
             buttonStopStart.UseVisualStyleBackColor = true;
             buttonStopStart.Click += buttonStopStart_Click;
             // 
+            // buttonSettings
+            // 
+            buttonSettings.Location = new Point(673, 27);
+            buttonSettings.Name = "buttonSettings";
+            buttonSettings.Size = new Size(64, 45);
+            buttonSettings.TabIndex = 0;
+            buttonSettings.Text = "settings";
+            buttonSettings.UseVisualStyleBackColor = true;
+            buttonSettings.Click += buttonSettings_Click;
+            // 
             // textBoxField
             // 
             textBoxField.Location = new Point(141, 52);
@@ -61,6 +70,24 @@
             textBoxField.Size = new Size(100, 23);
             textBoxField.TabIndex = 5;
             textBoxField.Leave += textBoxField_Leave;
+            // 
+            // textBoxSubject
+            // 
+            textBoxSubject.Location = new Point(141, 93);
+            textBoxSubject.Name = "textBoxSubject";
+            textBoxSubject.PlaceholderText = "Subject";
+            textBoxSubject.Size = new Size(100, 23);
+            textBoxSubject.TabIndex = 5;
+            textBoxSubject.Leave += textBoxSubject_Leave;
+            // 
+            // textBoxStage
+            // 
+            textBoxStage.Location = new Point(141, 135);
+            textBoxStage.Name = "textBoxStage";
+            textBoxStage.PlaceholderText = "Stage";
+            textBoxStage.Size = new Size(100, 23);
+            textBoxStage.TabIndex = 5;
+            textBoxStage.Leave += textBoxStage_Leave;
             // 
             // labelTimerRunning
             // 
@@ -84,35 +111,14 @@
             listViewHistory.View = View.Details;
             listViewHistory.Click += listViewHistory_Click;
             // 
-            // textBoxSubject
+            // dateTimePickerStarttimeCurrent
             // 
-            textBoxSubject.Location = new Point(141, 93);
-            textBoxSubject.Name = "textBoxSubject";
-            textBoxSubject.PlaceholderText = "Subject";
-            textBoxSubject.Size = new Size(100, 23);
-            textBoxSubject.TabIndex = 5;
-            textBoxSubject.Leave += textBoxSubject_Leave;
-            // 
-            // textBoxStage
-            // 
-            textBoxStage.Location = new Point(141, 135);
-            textBoxStage.Name = "textBoxStage";
-            textBoxStage.PlaceholderText = "Stage";
-            textBoxStage.Size = new Size(100, 23);
-            textBoxStage.TabIndex = 5;
-            textBoxStage.Leave += textBoxStage_Leave;
- 
-         
-            // 
-            // buttonSettings
-            // 
-            buttonSettings.Location = new Point(673, 27);
-            buttonSettings.Name = "buttonSettings";
-            buttonSettings.Size = new Size(64, 45);
-            buttonSettings.TabIndex = 0;
-            buttonSettings.Text = "settings";
-            buttonSettings.UseVisualStyleBackColor = true;
-            buttonSettings.Click += buttonSettings_Click;
+            dateTimePickerStarttimeCurrent.Format = DateTimePickerFormat.Time;
+            dateTimePickerStarttimeCurrent.Location = new Point(547, 78);
+            dateTimePickerStarttimeCurrent.Name = "dateTimePickerStarttimeCurrent";
+            dateTimePickerStarttimeCurrent.Size = new Size(200, 23);
+            dateTimePickerStarttimeCurrent.TabIndex = 7;
+            dateTimePickerStarttimeCurrent.ValueChanged += dateTimePickerHistory_ValueChanged;
             // 
             // labelStarttime
             // 
@@ -123,17 +129,6 @@
             labelStarttime.Size = new Size(101, 28);
             labelStarttime.TabIndex = 3;
             labelStarttime.Text = "Start time:";
-            // 
-            // dateTimePickerCurrent
-            // 
-            dateTimePickerStarttimeCurrent.Format = DateTimePickerFormat.Time;
-            dateTimePickerStarttimeCurrent.Location = new Point(547, 78);
-            dateTimePickerStarttimeCurrent.Name = "dateTimePickerCurrent";
-            dateTimePickerStarttimeCurrent.Size = new Size(200, 23);
-            dateTimePickerStarttimeCurrent.TabIndex = 7;
-            dateTimePickerStarttimeCurrent.ValueChanged += dateTimePickerHistory_ValueChanged;
-            
-            
             // 
             // label12
             // 
@@ -151,14 +146,24 @@
             listView2.Size = new Size(490, 214);
             listView2.TabIndex = 13;
             listView2.UseCompatibleStateImageBehavior = false;
-           
             // 
-            // Form1
+            // buttonDelete
+            // 
+            buttonDelete.Location = new Point(466, 183);
+            buttonDelete.Name = "buttonDelete";
+            buttonDelete.Size = new Size(75, 23);
+            buttonDelete.TabIndex = 14;
+            buttonDelete.Text = "Delete";
+            buttonDelete.UseCompatibleTextRendering = true;
+            buttonDelete.UseVisualStyleBackColor = true;
+            buttonDelete.Click += buttonDelete_Click;
+            // 
+            // MainWindowForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 749);
-           
+            Controls.Add(buttonDelete);
             Controls.Add(dateTimePickerStarttimeCurrent);
             Controls.Add(textBoxStage);
             Controls.Add(textBoxSubject);
@@ -167,13 +172,10 @@
             Controls.Add(textBoxField);
             Controls.Add(buttonSettings);
             Controls.Add(buttonStopStart);
-
             Controls.Add(labelStarttime);
             Controls.Add(listView2);
             Controls.Add(label12);
-
-
-            Name = "TimerApp";
+            Name = "MainWindowForm";
             Text = "TimerApp";
             Click += Form1_Click;
             ResumeLayout(false);
@@ -190,10 +192,10 @@
         private DateTimePicker dateTimePickerStarttimeCurrent;
         private Label labelTimerRunning;
         private ListView listViewHistory;
-       
-        private Label labelStarttime;     
+
+        private Label labelStarttime;
         private Label label12;
         private ListView listView2;
-      
+        private Button buttonDelete;
     }
 }

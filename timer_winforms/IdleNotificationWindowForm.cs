@@ -13,10 +13,10 @@ namespace timer_winforms
     public partial class IdleNotificationWindowForm : Form
     {
         private System.Windows.Forms.Timer minuteTimer = new System.Windows.Forms.Timer();
-        int idleDuration = TimeTracker.IDLE_INTERVAL / 60000;
-        string idleSince = (DateTime.Now - TimeSpan.FromMilliseconds((double)TimeTracker.IDLE_INTERVAL)).ToLongTimeString();
+        int idleDurationMinutes = TimeTracker.IDLE_INTERVAL / 60000;
+        DateTime idleSince = DateTime.Now - TimeSpan.FromMilliseconds((double)TimeTracker.IDLE_INTERVAL);
 
-        public delegate void IdleNotification();
+        public delegate void IdleNotification(double idleDurationMs);
         public static event IdleNotification DiscardTime;
 
         public IdleNotificationWindowForm()
@@ -25,18 +25,18 @@ namespace timer_winforms
 
             TimeTracker.idleTimer.Stop();
 
-            minuteTimer.Interval = 60 / 60 * 1000; //1 min
+            minuteTimer.Interval = 60 * 1000; //1 min
             minuteTimer.Tick += IdleMsgUpdate;
 
             minuteTimer.Start();
 
-            labelIdleMsg.Text = "You've been idle since " + idleSince + " (" + idleDuration + " min)";
+            labelIdleMsg.Text = "You've been idle since " + idleSince.ToLongTimeString() + " (" + idleDurationMinutes + " min)";
         }
 
         private void IdleMsgUpdate(object sender, EventArgs e)
         {
-            idleDuration++;
-            labelIdleMsg.Text = "You've been idle since " + idleSince + " (" + idleDuration + " min)";
+            idleDurationMinutes++;
+            labelIdleMsg.Text = "You've been idle since " + idleSince.ToLongTimeString() + " (" + idleDurationMinutes + " min)";
         }
 
         private void IdleNotificationWindowForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -51,7 +51,8 @@ namespace timer_winforms
 
         private void buttonIdleDiscardEntry_Click(object sender, EventArgs e)
         {
-            DiscardTime();
+            double idleTimeInSeconds = (DateTime.Now - idleSince).TotalSeconds;
+            DiscardTime(idleTimeInSeconds);
             this.Close();
         }
     }

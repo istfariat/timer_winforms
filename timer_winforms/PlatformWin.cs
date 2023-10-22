@@ -4,18 +4,19 @@ using System.Text;
 public class PlatformWin
 {
     public static System.Windows.Forms.Timer windowCheckTimer = new System.Windows.Forms.Timer();
-    //public static System.Windows.Forms.Timer trashholdTimer = new System.Windows.Forms.Timer();
-    public static int TRASHHOLD_INTERVAL = 5; //user value in sec to ms
-    private const int checkInterval = 1 * 1000;
+    public static int TRASHHOLD_INTERVAL = 5; //user value in sec
+    private const int checkInterval = 1 * 1000;  //user value in sec to ms
 
-    private const uint WINEVENT_OUTOFCONTEXT = 0;
-    private const uint EVENT_SYSTEM_FOREGROUND = 3;
+    public static uint idleTime;
+
+    //private const uint WINEVENT_OUTOFCONTEXT = 0;
+    //private const uint EVENT_SYSTEM_FOREGROUND = 3;
+
     public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
-    static WinEventDelegate dele = null;
+    //static WinEventDelegate dele = null;
 
-    private string prevWindow = "";
-    private int trashholdCounter = 0;
-
+    private static string prevWindow = "";
+    private static int trashholdCounter = 0;
 
     public delegate void TrackerHandler();
     public static event TrackerHandler ActiveWindowChange;
@@ -26,8 +27,8 @@ public class PlatformWin
     private static extern bool UnhookWinEvent(IntPtr hWinEventHook);
 
 
-    [DllImport("user32.dll")]
-    private static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+    //[DllImport("user32.dll")]
+    //private static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
 
     [DllImport("user32.dll")]
     private static extern IntPtr GetForegroundWindow();
@@ -45,37 +46,37 @@ public class PlatformWin
     }
 
 
-    public void DefineTimer()
+    public static void DefineTimer()
     {
-        //trashholdTimer.Tick += ;
         windowCheckTimer.Tick += CheckWindow;
-
         
         windowCheckTimer.Interval = checkInterval;
-
         
         windowCheckTimer.Start();
     }
 
-    private void CheckWindow(object sender, EventArgs e)
+    private static void CheckWindow(object sender, EventArgs e)
     {
         ActiveWindowChange?.Invoke();
 
         string currentWindow = GetActiveWindowTitle();
-        if (prevWindow == currentWindow)
+        if (prevWindow != currentWindow)
         {
-            //trashholdTimer.Start();
+            prevWindow = currentWindow;
+            trashholdCounter = 0;
+            return;
+        }
+           
+        if (trashholdCounter < TRASHHOLD_INTERVAL)
+        {
             trashholdCounter++;
             if (trashholdCounter == TRASHHOLD_INTERVAL)
             {
-                trashholdCounter = 0;
                 TrashholdReached?.Invoke();
                 return;
             }
+            return;
         }
-        
-        prevWindow = currentWindow;
-        trashholdCounter = 0;
     }
 
     public static string GetActiveWindowTitle()
@@ -94,18 +95,17 @@ public class PlatformWin
         return null;
     }
 
-    private static void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
-    {
-        ActiveWindowChange?.Invoke();
-    }
+    //private static void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+    //{
+    //    ActiveWindowChange?.Invoke();
+    //}
 
-    public static void ActivateWindowTrack()
-    {
-        dele = new WinEventDelegate(WinEventProc);
-        IntPtr m_hhook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
-    }
+    //public static void ActivateWindowTrack()
+    //{
+    //    dele = new WinEventDelegate(WinEventProc);
+    //    IntPtr m_hhook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
+    //}
     
-    public static uint idleTime;
 
     public static bool CheckIdle()
     {

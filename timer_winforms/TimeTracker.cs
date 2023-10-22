@@ -9,14 +9,11 @@ public class TimeTracker
     public static List<(DateTime startTime, DateTime endTime, TimeSpan duration, string field, string project, string stage)> history = new List<(DateTime, DateTime, TimeSpan, string, string, string)>();
     public static string[] fields = new string[6] { "Time started:\t", "Time ended:\t", "Duration:\t", "Field:\t\t", "Project:\t", "Stage:\t\t" };
 
-    //public static List<string>[] knownNames = new List<string>[3];
-
     public static (DateTime startTime, DateTime endTime, TimeSpan duration, string field, string project, string stage) currentEntry;
 
     public static System.Windows.Forms.Timer mainTimer = new System.Windows.Forms.Timer();
     public static System.Windows.Forms.Timer reminderTimer = new System.Windows.Forms.Timer();
     public static System.Windows.Forms.Timer idleTimer = new System.Windows.Forms.Timer();
-    //public static System.Windows.Forms.Timer trashholdTimer = new System.Windows.Forms.Timer();
 
 
 
@@ -41,12 +38,10 @@ public class TimeTracker
         reminderTimer.Tick += reminderTimer_Tick;
         mainTimer.Tick += mainTimer_Tick;
         idleTimer.Tick += idleTimer_Tick;
-
-        //IdleNotificationWindowForm.DiscardTime += DiscardTimer;
     }
 
    
-    public static void DiscardTimer()
+    public static void DeleteRunningEntry()
     {
         StoptMainTimer(true);
     }
@@ -104,18 +99,21 @@ public class TimeTracker
         currentEntry.startTime = DateTime.Now;
     }
 
-    public static void StoptMainTimer(bool discard = false)
+    public static void StoptMainTimer(bool deleteEntry = false, double idleTimeInSeconds = 0)
     {
         mainTimer.Stop();
         idleTimer.Stop();
         reminderTimer.Start();        
 
-        currentEntry.endTime = DateTime.Now;
+        if (idleTimeInSeconds > 0)
+            currentEntry.endTime = DateTime.Now - TimeSpan.FromSeconds(idleTimeInSeconds);
+        else currentEntry.endTime = DateTime.Now;
+       
         currentEntry.duration = currentEntry.endTime - currentEntry.startTime;
 
 
 
-        if (!discard)
+        if (!deleteEntry)
         {
             history.Add(currentEntry);
             SaveEntry(true);
