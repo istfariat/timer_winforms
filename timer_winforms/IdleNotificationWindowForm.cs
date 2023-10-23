@@ -16,7 +16,7 @@ namespace timer_winforms
         int idleDurationMinutes = TimeTracker.IDLE_INTERVAL / 60000;
         DateTime idleSince = DateTime.Now - TimeSpan.FromMilliseconds((double)TimeTracker.IDLE_INTERVAL);
 
-        public delegate void IdleNotification(double idleDurationMs);
+        public delegate void IdleNotification(double idleDurationMs, bool reset);
         public static event IdleNotification DiscardTime;
 
         public IdleNotificationWindowForm()
@@ -52,7 +52,22 @@ namespace timer_winforms
         private void buttonIdleDiscardEntry_Click(object sender, EventArgs e)
         {
             double idleTimeInSeconds = (DateTime.Now - idleSince).TotalSeconds;
-            DiscardTime(idleTimeInSeconds);
+            DiscardTime(idleTimeInSeconds, true);
+            this.Close();
+        }
+
+        private void buttonIdleContinueAsNew_Click(object sender, EventArgs e)
+        {
+            TimeTracker.mainTimer.Stop();
+            TimeTracker.mainTimer.Start();
+            this.Close();
+        }
+
+        private void buttonIdleDiscardCont_Click(object sender, EventArgs e)
+        {
+            double idleTimeInSeconds = (DateTime.Now - idleSince).TotalSeconds;
+            DiscardTime(idleTimeInSeconds, false);
+            TimeTracker.StartMainTimer();
             this.Close();
         }
     }

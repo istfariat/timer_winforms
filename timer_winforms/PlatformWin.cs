@@ -4,7 +4,6 @@ using System.Text;
 public class PlatformWin
 {
     public static System.Windows.Forms.Timer windowCheckTimer = new System.Windows.Forms.Timer();
-    public static int TRASHHOLD_INTERVAL = 5; //user value in sec
     private const int checkInterval = 1 * 1000;  //user value in sec to ms
 
     public static uint idleTime;
@@ -18,8 +17,8 @@ public class PlatformWin
     private static string prevWindow = "";
     private static int trashholdCounter = 0;
 
-    public delegate void TrackerHandler();
-    public static event TrackerHandler ActiveWindowChange;
+    public delegate void TrackerHandler(string WindowTitle);
+    public static event TrackerHandler ActiveWindowChanged;
     public static event TrackerHandler TrashholdReached;
 
 
@@ -57,9 +56,10 @@ public class PlatformWin
 
     private static void CheckWindow(object sender, EventArgs e)
     {
-        ActiveWindowChange?.Invoke();
-
         string currentWindow = GetActiveWindowTitle();
+        
+        ActiveWindowChanged?.Invoke(currentWindow);
+
         if (prevWindow != currentWindow)
         {
             prevWindow = currentWindow;
@@ -67,12 +67,12 @@ public class PlatformWin
             return;
         }
            
-        if (trashholdCounter < TRASHHOLD_INTERVAL)
+        if (trashholdCounter < TimeTracker.TRASHHOLD_INTERVAL)
         {
             trashholdCounter++;
-            if (trashholdCounter == TRASHHOLD_INTERVAL)
+            if (trashholdCounter == TimeTracker.TRASHHOLD_INTERVAL)
             {
-                TrashholdReached?.Invoke();
+                TrashholdReached?.Invoke(currentWindow);
                 return;
             }
             return;

@@ -23,9 +23,10 @@ namespace timer_winforms
             TimeTracker.mainTimer.Tick += ShowRunningTime;
 
 
-            PlatformWin.ActiveWindowChange += ShowActiveWindow;
+            PlatformWin.ActiveWindowChanged += ShowActiveWindow;
             TimeTracker.NewEntryAdded += ShowHistory;
             IdleNotificationWindowForm.DiscardTime += DiscardEntry;
+            TimeTracker.AutoTimerStarted += UpdateControls;
 
             TimeTracker.reminderTimer.Start();
 
@@ -37,6 +38,17 @@ namespace timer_winforms
 
         #region Form/Control Events
 
+        private void UpdateControls()
+        {
+            textBoxField.Text = TimeTracker.currentEntry.field;
+            textBoxSubject.Text = TimeTracker.currentEntry.project;
+            textBoxStage.Text = TimeTracker.currentEntry.stage;
+            dateTimePickerStarttimeCurrent.Value = TimeTracker.currentEntry.startTime;
+            labelTimerRunning.Text = "00:00:00";
+            buttonDelete.Show();
+        }
+
+
         private void ResetFields()
         {
             labelTimerRunning.Text = "00:00:00";
@@ -45,18 +57,20 @@ namespace timer_winforms
             textBoxStage.Text = string.Empty;
         }
 
-        private void DiscardEntry(double idleTimeSeconds)
+        private void DiscardEntry(double idleTimeSeconds, bool reset = true)
         {
             TimeTracker.StoptMainTimer(false, idleTimeSeconds);
+            
+            if (reset) { return; }
+
             ResetFields();
         }
 
 
-        void ShowActiveWindow()
+        void ShowActiveWindow(string WindowTitle) //move to timetracker.cs
         {
-            string currentWindow = PlatformWin.GetActiveWindowTitle();
-            label12.Text = currentWindow;
-            listView2.Items.Add(currentWindow);
+            label12.Text = WindowTitle;
+            listView2.Items.Add(WindowTitle);
         }
 
         private void buttonStopStart_Click(object sender, EventArgs e)

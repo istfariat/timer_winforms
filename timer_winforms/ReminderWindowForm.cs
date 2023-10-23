@@ -13,7 +13,7 @@ namespace timer_winforms
     public partial class ReminderWindowForm : Form
     {
         static System.Windows.Forms.Timer closeTimer = new System.Windows.Forms.Timer();
-                
+
         public ReminderWindowForm()
         {
             InitializeComponent();
@@ -45,11 +45,11 @@ namespace timer_winforms
 
         private void buttonStartFromReminder_Click(object sender, EventArgs e)
         {
-            WindowClose(); 
+            WindowClose();
             TimeTracker.StartMainTimer();
         }
 
-        private void WindowClose ()
+        private void WindowClose()
         {
             closeTimer.Stop();
             this.Close();

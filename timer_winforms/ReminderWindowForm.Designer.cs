@@ -53,12 +53,15 @@
             labelReminderMsg.Text = "Dont forget to track your time!";
             // 
             // ReminderWindowForm
-            // 
+            //         
+            System.Drawing.Rectangle workingRectangle = Screen.PrimaryScreen.WorkingArea;
+
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(284, 141);
             Controls.Add(labelReminderMsg);
             Controls.Add(buttonStartFromReminder);
+            Location = new Point(workingRectangle.Width - this.Size.Width, workingRectangle.Height - this.Size.Height);
             Name = "ReminderWindowForm";
             StartPosition = FormStartPosition.Manual;
             Text = "ReminderWindowForm";

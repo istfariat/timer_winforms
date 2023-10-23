@@ -15,17 +15,19 @@ public class TimeTracker
     public static System.Windows.Forms.Timer reminderTimer = new System.Windows.Forms.Timer();
     public static System.Windows.Forms.Timer idleTimer = new System.Windows.Forms.Timer();
 
-
+    public static string[] knownNames = new string[3] {"blender", "league of legends", "twitch"}; // placeholder
 
     public static string pathToSave = "G:\\Projects\\Sharping\\Timer (cons)\\savefiles\\timerhistory.txt";
     public static string settingsPath = "G:\\Projects\\Sharping\\Timer (cons)\\savefiles\\settings.txt";
     static bool END_TIME_SHIFT;
     public static int IDLE_INTERVAL = 1 * 60 * 1000; //user value in min to ms
-    //public static int TRASHHOLD_INTERVAL = 5 * 1000; //user value in sec to ms
+    public static int TRASHHOLD_INTERVAL = 5; //user value in sec
+    public static bool ENABLE_AUTO_TIMER = true;
 
     public delegate void TrackerHandler();
     public static event TrackerHandler UserIdle;
     public static event TrackerHandler NewEntryAdded;
+    public static event TrackerHandler AutoTimerStarted;
 
     
     public static void DefineTimers()
@@ -38,9 +40,34 @@ public class TimeTracker
         reminderTimer.Tick += reminderTimer_Tick;
         mainTimer.Tick += mainTimer_Tick;
         idleTimer.Tick += idleTimer_Tick;
+        PlatformWin.TrashholdReached += CheckNewAutotime;
     }
 
    
+    private static void CheckNewAutotime (string WindowTitle) // placeholder
+    {
+        //WindowTitle = WindowTitle.T();
+        if (!ENABLE_AUTO_TIMER) return;
+        
+        foreach (string name in knownNames)
+        {
+            if (WindowTitle.ToLower().Contains(name) && currentEntry.field != name) 
+            {
+                if (mainTimer.Enabled)
+                    StoptMainTimer();
+
+                currentEntry.project = name;
+                currentEntry.field = string.Empty;
+                currentEntry.stage = string.Empty;
+                currentEntry.duration = TimeSpan.Zero;
+
+                StartMainTimer();
+
+                AutoTimerStarted?.Invoke();
+            }
+        }
+    }
+
     public static void DeleteRunningEntry()
     {
         StoptMainTimer(true);
@@ -92,6 +119,8 @@ public class TimeTracker
 
     public static void StartMainTimer()
     {
+        
+
         reminderTimer.Stop();
         mainTimer.Start();
         idleTimer.Start();

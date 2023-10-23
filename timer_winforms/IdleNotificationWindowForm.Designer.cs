@@ -31,6 +31,8 @@
             labelIdleMsg = new Label();
             buttonIdleContinueEntry = new Button();
             buttonIdleDiscardEntry = new Button();
+            buttonIdleDiscardCont = new Button();
+            buttonIdleContinueAsNew = new Button();
             SuspendLayout();
             // 
             // labelIdleMsg
@@ -63,11 +65,33 @@
             buttonIdleDiscardEntry.UseVisualStyleBackColor = true;
             buttonIdleDiscardEntry.Click += buttonIdleDiscardEntry_Click;
             // 
+            // buttonIdleDiscardCont
+            // 
+            buttonIdleDiscardCont.Location = new Point(53, 235);
+            buttonIdleDiscardCont.Name = "buttonIdleDiscardCont";
+            buttonIdleDiscardCont.Size = new Size(129, 39);
+            buttonIdleDiscardCont.TabIndex = 2;
+            buttonIdleDiscardCont.Text = "Discard entry & continue";
+            buttonIdleDiscardCont.UseVisualStyleBackColor = true;
+            buttonIdleDiscardCont.Click += buttonIdleDiscardCont_Click;
+            // 
+            // buttonIdleContinueAsNew
+            // 
+            buttonIdleContinueAsNew.Location = new Point(53, 280);
+            buttonIdleContinueAsNew.Name = "buttonIdleContinueAsNew";
+            buttonIdleContinueAsNew.Size = new Size(129, 39);
+            buttonIdleContinueAsNew.TabIndex = 2;
+            buttonIdleContinueAsNew.Text = "Continue as new entry";
+            buttonIdleContinueAsNew.UseVisualStyleBackColor = true;
+            buttonIdleContinueAsNew.Click += buttonIdleContinueAsNew_Click;
+            // 
             // IdleNotificationWindowForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(236, 401);
+            Controls.Add(buttonIdleContinueAsNew);
+            Controls.Add(buttonIdleDiscardCont);
             Controls.Add(buttonIdleDiscardEntry);
             Controls.Add(buttonIdleContinueEntry);
             Controls.Add(labelIdleMsg);
@@ -83,5 +107,7 @@
         private Label labelIdleMsg;
         private Button buttonIdleContinueEntry;
         private Button buttonIdleDiscardEntry;
+        private Button buttonIdleDiscardCont;
+        private Button buttonIdleContinueAsNew;
     }
 }
