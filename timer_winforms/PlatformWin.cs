@@ -8,12 +8,8 @@ public class PlatformWin
 
     public static uint idleTime;
 
-    //private const uint WINEVENT_OUTOFCONTEXT = 0;
-    //private const uint EVENT_SYSTEM_FOREGROUND = 3;
-
     public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
-    //static WinEventDelegate dele = null;
-
+    
     private static string prevWindow = "";
     private static int trashholdCounter = 0;
 
@@ -25,9 +21,6 @@ public class PlatformWin
     [DllImport("user32.dll")]
     private static extern bool UnhookWinEvent(IntPtr hWinEventHook);
 
-
-    //[DllImport("user32.dll")]
-    //private static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
 
     [DllImport("user32.dll")]
     private static extern IntPtr GetForegroundWindow();
@@ -67,10 +60,10 @@ public class PlatformWin
             return;
         }
            
-        if (trashholdCounter < TimeTracker.TRASHHOLD_INTERVAL)
+        if (trashholdCounter < UserProperties.TRASHHOLD_INTERVAL)
         {
             trashholdCounter++;
-            if (trashholdCounter == TimeTracker.TRASHHOLD_INTERVAL)
+            if (trashholdCounter == UserProperties.TRASHHOLD_INTERVAL)
             {
                 TrashholdReached?.Invoke(currentWindow);
                 return;
@@ -94,18 +87,6 @@ public class PlatformWin
         UnhookWinEvent(handle);
         return null;
     }
-
-    //private static void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
-    //{
-    //    ActiveWindowChange?.Invoke();
-    //}
-
-    //public static void ActivateWindowTrack()
-    //{
-    //    dele = new WinEventDelegate(WinEventProc);
-    //    IntPtr m_hhook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
-    //}
-    
 
     public static bool CheckIdle()
     {

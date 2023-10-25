@@ -17,13 +17,6 @@ public class TimeTracker
 
     public static string[] knownNames = new string[3] {"blender", "league of legends", "twitch"}; // placeholder
 
-    public static string pathToSave = "G:\\Projects\\Sharping\\Timer (cons)\\savefiles\\timerhistory.txt";
-    public static string settingsPath = "G:\\Projects\\Sharping\\Timer (cons)\\savefiles\\settings.txt";
-    static bool END_TIME_SHIFT;
-    public static int IDLE_INTERVAL = 1 * 60 * 1000; //user value in min to ms
-    public static int TRASHHOLD_INTERVAL = 5; //user value in sec
-    public static bool ENABLE_AUTO_TIMER = true;
-
     public delegate void TrackerHandler();
     public static event TrackerHandler UserIdle;
     public static event TrackerHandler NewEntryAdded;
@@ -34,7 +27,7 @@ public class TimeTracker
     {
         mainTimer.Interval = 100;            //0.1s
         reminderTimer.Interval = 20 * 1000;     //20s
-        idleTimer.Interval = IDLE_INTERVAL;
+        idleTimer.Interval = UserProperties.IDLE_INTERVAL;
         //trashholdTimer.Interval = TRASHHOLD_INTERVAL;
 
         reminderTimer.Tick += reminderTimer_Tick;
@@ -47,7 +40,7 @@ public class TimeTracker
     private static void CheckNewAutotime (string WindowTitle) // placeholder
     {
         //WindowTitle = WindowTitle.T();
-        if (!ENABLE_AUTO_TIMER) return;
+        if (!UserProperties.ENABLE_AUTO_TIMER) return;
         
         foreach (string name in knownNames)
         {
@@ -98,12 +91,12 @@ public class TimeTracker
     {
         if (PlatformWin.CheckIdle())
         {
-            int idleTemp = IDLE_INTERVAL - (int)PlatformWin.idleTime;
+            int idleTemp = UserProperties.IDLE_INTERVAL - (int)PlatformWin.idleTime;
             if (idleTemp > 0)
                 idleTimer.Interval = idleTemp;
             else
             {
-                idleTimer.Interval = IDLE_INTERVAL;
+                idleTimer.Interval = UserProperties.IDLE_INTERVAL;
                 UserIdle?.Invoke();
                 idleTimer.Stop();
             }
@@ -160,14 +153,14 @@ public class TimeTracker
     {
         if (append)
         {
-            using (StreamWriter sw = new StreamWriter(pathToSave, append))
+            using (StreamWriter sw = new StreamWriter(UserProperties.pathToSave, append))
             {
                 sw.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n", currentEntry.startTime.ToString(), currentEntry.endTime.ToString(), TimeSpanToString(currentEntry.duration), currentEntry.field, currentEntry.project, currentEntry.stage);
             }
         }
         else
         {
-            using (StreamWriter sw = new StreamWriter(pathToSave, append))
+            using (StreamWriter sw = new StreamWriter(UserProperties.pathToSave, append))
             {
                 foreach (var entry in history)
                 {
@@ -200,7 +193,7 @@ public class TimeTracker
             {
                 tempEntry.startTime = newDate;
                 
-                if (END_TIME_SHIFT)
+                if (UserProperties.END_TIME_SHIFT)
                 {
                     tempEntry.endTime = tempEntry.endTime.Add(tempEntry.duration);
                 }
@@ -243,10 +236,10 @@ public class TimeTracker
 
     public static void LoadEntry()
     {
-        if (!File.Exists(pathToSave))
+        if (!File.Exists(UserProperties.pathToSave))
             return;
 
-        using (StreamReader sr = File.OpenText(pathToSave))
+        using (StreamReader sr = File.OpenText(UserProperties.pathToSave))
         {
             string s;
             history.Clear();

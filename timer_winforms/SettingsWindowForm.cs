@@ -16,6 +16,7 @@ namespace timer_winforms
         public SettingsWindowForm()
         {
             InitializeComponent();
+            label2.Text = UserProperties.test;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -27,8 +28,8 @@ namespace timer_winforms
         {
             //dataGridView1 = new DataGridView();
             dataGridView1.Rows[dataGridView1.Rows.Add()].Cells[0].Value = "Save history to:";
-            dataGridView1.Rows[0].Cells[1].Value = TimeTracker.pathToSave;
-            dataGridView1.Rows[dataGridView1.Rows.Add()].Cells[1].Value = TimeTracker.pathToSave;
+            dataGridView1.Rows[0].Cells[1].Value = UserProperties.pathToSave;
+            dataGridView1.Rows[dataGridView1.Rows.Add()].Cells[1].Value = UserProperties.pathToSave;
         }
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
@@ -43,6 +44,11 @@ namespace timer_winforms
             {
             }
             Console.WriteLine(result); // <-- For debugging use.
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            label1.Text = Environment.CurrentDirectory;
         }
     }
 }

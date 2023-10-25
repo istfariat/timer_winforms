@@ -17,6 +17,7 @@ namespace timer_winforms
             TimeTracker.DefineTimers();
             PlatformWin.DefineTimer();
             //PlatformWin.ActivateWindowTrack();
+            UserProperties.CheckSettings();
 
             TimeTracker.reminderTimer.Tick += reminderTimer_Tick;
             TimeTracker.UserIdle += ShowIdleWindow;

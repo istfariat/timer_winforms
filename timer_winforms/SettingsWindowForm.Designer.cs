@@ -35,6 +35,9 @@
             openFileDialog1 = new OpenFileDialog();
             panel1 = new Panel();
             panel2 = new Panel();
+            button2 = new Button();
+            label1 = new Label();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -64,7 +67,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(652, 127);
+            button1.Location = new Point(651, 53);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 1;
@@ -93,20 +96,52 @@
             panel2.Size = new Size(200, 27);
             panel2.TabIndex = 0;
             // 
-            // Form3
+            // button2
+            // 
+            button2.Location = new Point(122, 85);
+            button2.Name = "button2";
+            button2.Size = new Size(75, 23);
+            button2.TabIndex = 3;
+            button2.Text = "button2";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(122, 53);
+            label1.Name = "label1";
+            label1.Size = new Size(38, 15);
+            label1.TabIndex = 4;
+            label1.Text = "label1";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(621, 188);
+            label2.Name = "label2";
+            label2.Size = new Size(38, 15);
+            label2.TabIndex = 5;
+            label2.Text = "label2";
+            // 
+            // SettingsWindowForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(button2);
             Controls.Add(panel1);
             Controls.Add(button1);
             Controls.Add(dataGridView1);
-            Name = "Settings";
+            Name = "SettingsWindowForm";
             Text = "Settings";
             Load += SettingsWindowForm_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             panel1.ResumeLayout(false);
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -118,5 +153,8 @@
         private OpenFileDialog openFileDialog1;
         private Panel panel1;
         private Panel panel2;
+        private Button button2;
+        private Label label1;
+        private Label label2;
     }
 }
