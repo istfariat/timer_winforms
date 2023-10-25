@@ -60,10 +60,10 @@ public class PlatformWin
             return;
         }
            
-        if (trashholdCounter < UserProperties.TRASHHOLD_INTERVAL)
+        if (trashholdCounter < TimeTracker.UserSettings.TRASHHOLD_INTERVAL_SEC)
         {
             trashholdCounter++;
-            if (trashholdCounter == UserProperties.TRASHHOLD_INTERVAL)
+            if (trashholdCounter == TimeTracker.UserSettings.TRASHHOLD_INTERVAL_SEC)
             {
                 TrashholdReached?.Invoke(currentWindow);
                 return;

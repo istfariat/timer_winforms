@@ -13,8 +13,8 @@ namespace timer_winforms
     public partial class IdleNotificationWindowForm : Form
     {
         private System.Windows.Forms.Timer minuteTimer = new System.Windows.Forms.Timer();
-        int idleDurationMinutes = UserProperties.IDLE_INTERVAL / 60000;
-        DateTime idleSince = DateTime.Now - TimeSpan.FromMilliseconds((double)UserProperties.IDLE_INTERVAL);
+        int idleDurationMinutes = TimeTracker.UserSettings.IDLE_INTERVAL_MIN;
+        DateTime idleSince = DateTime.Now - TimeSpan.FromMinutes((double)TimeTracker.UserSettings.IDLE_INTERVAL_MIN);
 
         public delegate void IdleNotification(double idleDurationMs, bool reset);
         public static event IdleNotification DiscardTime;

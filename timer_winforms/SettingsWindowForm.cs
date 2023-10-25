@@ -28,8 +28,8 @@ namespace timer_winforms
         {
             //dataGridView1 = new DataGridView();
             dataGridView1.Rows[dataGridView1.Rows.Add()].Cells[0].Value = "Save history to:";
-            dataGridView1.Rows[0].Cells[1].Value = UserProperties.pathToSave;
-            dataGridView1.Rows[dataGridView1.Rows.Add()].Cells[1].Value = UserProperties.pathToSave;
+            dataGridView1.Rows[0].Cells[1].Value = TimeTracker.UserSettings.SaveDirectory;
+            dataGridView1.Rows[dataGridView1.Rows.Add()].Cells[1].Value = TimeTracker.UserSettings.SaveDirectory;
         }
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)

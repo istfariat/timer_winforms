@@ -12,12 +12,14 @@ namespace timer_winforms
         public MainWindowForm()
         {
             InitializeComponent();
+            //UserProperties.CheckSettings();
+            Settings settings = UserProperties.CheckSettings();
             ShowHistory();
 
             TimeTracker.DefineTimers();
             PlatformWin.DefineTimer();
             //PlatformWin.ActivateWindowTrack();
-            UserProperties.CheckSettings();
+            
 
             TimeTracker.reminderTimer.Tick += reminderTimer_Tick;
             TimeTracker.UserIdle += ShowIdleWindow;
