@@ -16,6 +16,12 @@ namespace timer_winforms
         public SettingsWindowForm()
         {
             InitializeComponent();
+
+            if (TimeTracker.UserSettings.ENABLE_AUTO_TIMER)
+                checkBoxAutoTime.Checked = true;
+            if (TimeTracker.UserSettings.END_TIME_SHIFT)
+                checkBoxEndTimeShift.Checked = true;
+            
             label2.Text = UserProperties.test;
         }
 
@@ -49,6 +55,34 @@ namespace timer_winforms
         private void button2_Click(object sender, EventArgs e)
         {
             label1.Text = Environment.CurrentDirectory;
+        }
+
+        private void checkBoxAutoTime_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxAutoTime.Checked)
+            {
+                TimeTracker.UserSettings.ENABLE_AUTO_TIMER = true;
+            }
+            else
+            {
+                TimeTracker.UserSettings.ENABLE_AUTO_TIMER = false;
+            }
+
+            UserProperties.UpdateSettingsFile(TimeTracker.UserSettings);
+        }
+
+        private void checkBoxEndTimeShift_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxEndTimeShift.Checked)
+            {
+                TimeTracker.UserSettings.END_TIME_SHIFT = true;
+            }
+            else
+            {
+                TimeTracker.UserSettings.END_TIME_SHIFT = false;
+            }
+
+            UserProperties.UpdateSettingsFile(TimeTracker.UserSettings);
         }
     }
 }

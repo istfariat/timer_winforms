@@ -17,6 +17,9 @@ namespace timer_winforms
         public ReminderWindowForm()
         {
             InitializeComponent();
+            
+            System.Drawing.Rectangle workingRectangle = Screen.PrimaryScreen.WorkingArea;
+            Location = new Point(workingRectangle.Width - this.Size.Width, workingRectangle.Height - this.Size.Height);
 
             closeTimer.Interval = 5000;
             closeTimer.Tick += closeTimer_Tick;

@@ -38,6 +38,8 @@
             button2 = new Button();
             label1 = new Label();
             label2 = new Label();
+            checkBoxAutoTime = new CheckBox();
+            checkBoxEndTimeShift = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -47,7 +49,7 @@
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { settingName, settingValue });
-            dataGridView1.Location = new Point(267, 127);
+            dataGridView1.Location = new Point(274, 165);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowTemplate.Height = 25;
             dataGridView1.Size = new Size(254, 150);
@@ -124,11 +126,35 @@
             label2.TabIndex = 5;
             label2.Text = "label2";
             // 
+            // checkBoxAutoTime
+            // 
+            checkBoxAutoTime.AutoSize = true;
+            checkBoxAutoTime.Location = new Point(347, 30);
+            checkBoxAutoTime.Name = "checkBoxAutoTime";
+            checkBoxAutoTime.Size = new Size(103, 19);
+            checkBoxAutoTime.TabIndex = 6;
+            checkBoxAutoTime.Text = "AutoTimer ON";
+            checkBoxAutoTime.UseVisualStyleBackColor = true;
+            checkBoxAutoTime.CheckedChanged += checkBoxAutoTime_CheckedChanged;
+            // 
+            // checkBoxEndTimeShift
+            // 
+            checkBoxEndTimeShift.AutoSize = true;
+            checkBoxEndTimeShift.Location = new Point(346, 57);
+            checkBoxEndTimeShift.Name = "checkBoxEndTimeShift";
+            checkBoxEndTimeShift.Size = new Size(250, 19);
+            checkBoxEndTimeShift.TabIndex = 7;
+            checkBoxEndTimeShift.Text = "Shift endtime when is starttime is changed";
+            checkBoxEndTimeShift.UseVisualStyleBackColor = true;
+            checkBoxEndTimeShift.CheckedChanged += checkBoxEndTimeShift_CheckedChanged;
+            // 
             // SettingsWindowForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(checkBoxEndTimeShift);
+            Controls.Add(checkBoxAutoTime);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(button2);
@@ -156,5 +182,7 @@
         private Button button2;
         private Label label1;
         private Label label2;
+        private CheckBox checkBoxAutoTime;
+        private CheckBox checkBoxEndTimeShift;
     }
 }
