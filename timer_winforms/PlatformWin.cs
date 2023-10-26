@@ -11,11 +11,11 @@ public class PlatformWin
     public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
     
     private static string prevWindow = "";
-    private static int trashholdCounter = 0;
+    private static int thresholdCounter = 0;
 
     public delegate void TrackerHandler(string WindowTitle);
     public static event TrackerHandler ActiveWindowChanged;
-    public static event TrackerHandler TrashholdReached;
+    public static event TrackerHandler ThresholdReached;
 
 
     [DllImport("user32.dll")]
@@ -56,16 +56,16 @@ public class PlatformWin
         if (prevWindow != currentWindow)
         {
             prevWindow = currentWindow;
-            trashholdCounter = 0;
+            thresholdCounter = 0;
             return;
         }
            
-        if (trashholdCounter < TimeTracker.UserSettings.TRASHHOLD_INTERVAL_SEC)
+        if (thresholdCounter < TimeTracker.UserSettings.THRESHOLD_INTERVAL_SEC)
         {
-            trashholdCounter++;
-            if (trashholdCounter == TimeTracker.UserSettings.TRASHHOLD_INTERVAL_SEC)
+            thresholdCounter++;
+            if (thresholdCounter == TimeTracker.UserSettings.THRESHOLD_INTERVAL_SEC)
             {
-                TrashholdReached?.Invoke(currentWindow);
+                ThresholdReached?.Invoke(currentWindow);
                 return;
             }
             return;

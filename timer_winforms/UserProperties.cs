@@ -8,8 +8,9 @@ public class Settings
 {
     public  string? SaveDirectory { get; set; }
     public  int IDLE_INTERVAL_MIN { get; set; }
+    public bool ENABLE_REMINDER_TIMER { get; set; }
     public  int REMINDER_INTERVAL_MIN { get; set; }
-    public  int TRASHHOLD_INTERVAL_SEC { get; set; }
+    public  int THRESHOLD_INTERVAL_SEC { get; set; }
     public  bool ENABLE_AUTO_TIMER { get; set; }
     public  bool END_TIME_SHIFT { get; set; }
 }
@@ -20,8 +21,9 @@ public class UserProperties
     {
         SaveDirectory = Environment.CurrentDirectory + @"\timerhistory.txt",
         IDLE_INTERVAL_MIN = 1,
+        ENABLE_REMINDER_TIMER = true,
         REMINDER_INTERVAL_MIN = 1,
-        TRASHHOLD_INTERVAL_SEC = 5,
+        THRESHOLD_INTERVAL_SEC = 5,
         ENABLE_AUTO_TIMER = false,
         END_TIME_SHIFT = false
     };

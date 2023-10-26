@@ -21,21 +21,20 @@ namespace timer_winforms
                 checkBoxAutoTime.Checked = true;
             if (TimeTracker.UserSettings.END_TIME_SHIFT)
                 checkBoxEndTimeShift.Checked = true;
-            
-            label2.Text = UserProperties.test;
+            if (TimeTracker.UserSettings.ENABLE_REMINDER_TIMER)
+                checkBoxReminder.Checked = true;
+
+            textBoxSavePath.Text = TimeTracker.UserSettings.SaveDirectory;
+            numericUpDownReminder.Value = TimeTracker.UserSettings.REMINDER_INTERVAL_MIN;
+            numericUpDownIdle.Value = TimeTracker.UserSettings.IDLE_INTERVAL_MIN;
+            numericUpDownThreshold.Value = TimeTracker.UserSettings.THRESHOLD_INTERVAL_SEC;
+
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
 
         private void SettingsWindowForm_Load(object sender, EventArgs e)
         {
-            //dataGridView1 = new DataGridView();
-            dataGridView1.Rows[dataGridView1.Rows.Add()].Cells[0].Value = "Save history to:";
-            dataGridView1.Rows[0].Cells[1].Value = TimeTracker.UserSettings.SaveDirectory;
-            dataGridView1.Rows[dataGridView1.Rows.Add()].Cells[1].Value = TimeTracker.UserSettings.SaveDirectory;
+
         }
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
@@ -43,19 +42,6 @@ namespace timer_winforms
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            DialogResult result = openFileDialog1.ShowDialog();
-            if (result == DialogResult.OK) // Test result.
-            {
-            }
-            Console.WriteLine(result); // <-- For debugging use.
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            label1.Text = Environment.CurrentDirectory;
-        }
 
         private void checkBoxAutoTime_CheckedChanged(object sender, EventArgs e)
         {
@@ -68,7 +54,7 @@ namespace timer_winforms
                 TimeTracker.UserSettings.ENABLE_AUTO_TIMER = false;
             }
 
-            UserProperties.UpdateSettingsFile(TimeTracker.UserSettings);
+            //UserProperties.UpdateSettingsFile(TimeTracker.UserSettings);
         }
 
         private void checkBoxEndTimeShift_CheckedChanged(object sender, EventArgs e)
@@ -82,7 +68,51 @@ namespace timer_winforms
                 TimeTracker.UserSettings.END_TIME_SHIFT = false;
             }
 
+            //UserProperties.UpdateSettingsFile(TimeTracker.UserSettings);
+        }
+
+        private void checkBoxReminder_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxReminder.Checked)
+            {
+                TimeTracker.UserSettings.ENABLE_REMINDER_TIMER = true;
+            }
+            else
+            {
+                TimeTracker.UserSettings.ENABLE_REMINDER_TIMER = false;
+            }
+
+            //UserProperties.UpdateSettingsFile(TimeTracker.UserSettings);
+        }
+
+
+
+        private void textBoxSavePath_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                textBoxSavePath.Text = openFileDialog1.FileName;
+                pathChanged = true;
+            }
+            //Console.WriteLine(result); // <-- For debugging use.
+        }
+
+        private bool pathChanged = false;
+        public delegate void SettingsHandler();
+        public static event SettingsHandler SaveFilePathChaged;
+
+        private void buttonSaveSettings_Click(object sender, EventArgs e)
+        {
+            TimeTracker.UserSettings.THRESHOLD_INTERVAL_SEC = Convert.ToInt32(numericUpDownThreshold.Value);
+            TimeTracker.UserSettings.REMINDER_INTERVAL_MIN = Convert.ToInt32(numericUpDownReminder.Value);
+            TimeTracker.UserSettings.IDLE_INTERVAL_MIN = Convert.ToInt32(numericUpDownIdle.Value);
+            TimeTracker.UserSettings.SaveDirectory = textBoxSavePath.Text;
+
             UserProperties.UpdateSettingsFile(TimeTracker.UserSettings);
+
+            if (pathChanged)
+                SaveFilePathChaged?.Invoke();
         }
     }
 }

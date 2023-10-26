@@ -22,8 +22,10 @@ public class TimeTracker
     public static event TrackerHandler UserIdle;
     public static event TrackerHandler NewEntryAdded;
     public static event TrackerHandler AutoTimerStarted;
-
+    public static event TrackerHandler ReminderReached;
     
+
+
     public static void DefineTimers()
     {
         mainTimer.Interval = 100;            //0.1s
@@ -34,7 +36,7 @@ public class TimeTracker
         reminderTimer.Tick += reminderTimer_Tick;
         mainTimer.Tick += mainTimer_Tick;
         idleTimer.Tick += idleTimer_Tick;
-        PlatformWin.TrashholdReached += CheckNewAutotime;
+        PlatformWin.ThresholdReached += CheckNewAutotime;
     }
 
    
@@ -70,7 +72,8 @@ public class TimeTracker
 
     static void reminderTimer_Tick(object sender, EventArgs a)
     {
-
+        if (UserSettings.ENABLE_REMINDER_TIMER)
+            ReminderReached?.Invoke();
     }
 
     #region completed rework

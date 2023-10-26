@@ -12,7 +12,7 @@ namespace timer_winforms
         public MainWindowForm()
         {
             InitializeComponent();
-            //UserProperties.CheckSettings();
+            UserProperties.CheckSettings();
             Settings settings = UserProperties.CheckSettings();
             ShowHistory();
 
@@ -21,7 +21,7 @@ namespace timer_winforms
             //PlatformWin.ActivateWindowTrack();
             
 
-            TimeTracker.reminderTimer.Tick += reminderTimer_Tick;
+            TimeTracker.ReminderReached += reminderTimer_Tick;
             TimeTracker.UserIdle += ShowIdleWindow;
             TimeTracker.mainTimer.Tick += ShowRunningTime;
 
@@ -30,6 +30,7 @@ namespace timer_winforms
             TimeTracker.NewEntryAdded += ShowHistory;
             IdleNotificationWindowForm.DiscardTime += DiscardEntry;
             TimeTracker.AutoTimerStarted += UpdateControls;
+            SettingsWindowForm.SaveFilePathChaged += ShowHistory;
 
             TimeTracker.reminderTimer.Start();
 
@@ -143,7 +144,7 @@ namespace timer_winforms
         }
 
 
-        void reminderTimer_Tick(object sender, EventArgs a)
+        void reminderTimer_Tick()
         {
             ReminderWindowForm reminderWindow = new ReminderWindowForm();
             reminderWindow.Show();
