@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 using System.Windows.Forms.VisualStyles;
 using timer_winforms;
 
@@ -17,6 +18,11 @@ public class TimeTracker
     public static System.Windows.Forms.Timer idleTimer = new System.Windows.Forms.Timer();
 
     public static string[] knownNames = new string[3] {"blender", "league of legends", "twitch"}; // placeholder
+
+    private static JsonSerializerOptions jsonOptions = new JsonSerializerOptions
+    {
+        IncludeFields = true,
+    };
 
     public delegate void TrackerHandler();
     public static event TrackerHandler UserIdle;
@@ -159,16 +165,21 @@ public class TimeTracker
         {
             using (StreamWriter sw = new StreamWriter(TimeTracker.UserSettings.SaveDirectory, append))
             {
-                sw.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n", currentEntry.startTime.ToString(), currentEntry.endTime.ToString(), TimeSpanToString(currentEntry.duration), currentEntry.field, currentEntry.project, currentEntry.stage);
+                //sw.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n", currentEntry.startTime.ToString(), currentEntry.endTime.ToString(), TimeSpanToString(currentEntry.duration), currentEntry.field, currentEntry.project, currentEntry.stage);
+                string jsonString = JsonSerializer.Serialize(currentEntry, jsonOptions);
+                sw.WriteLine(jsonString);
             }
         }
         else
         {
             using (StreamWriter sw = new StreamWriter(TimeTracker.UserSettings.SaveDirectory, append))
             {
+                string jsonString;
                 foreach (var entry in history)
                 {
-                    sw.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n", entry.startTime.ToString(), entry.endTime.ToString(), TimeSpanToString(entry.duration, false), entry.field, entry.project, entry.stage);
+                    //sw.Write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n", entry.startTime.ToString(), entry.endTime.ToString(), TimeSpanToString(entry.duration, false), entry.field, entry.project, entry.stage);
+                    jsonString = JsonSerializer.Serialize(entry, jsonOptions);
+                    sw.WriteLine(jsonString);
                 }
             }
         }
@@ -191,7 +202,8 @@ public class TimeTracker
             if (isEndTime)
             {
                 tempEntry.endTime = newDate;
-                EditDuration(sourceEntryIndex);
+                //EditDuration(sourceEntryIndex);
+                tempEntry.duration = tempEntry.endTime - tempEntry.startTime;
             }
             else
             {
@@ -203,7 +215,8 @@ public class TimeTracker
                 }
                 else
                 {
-                    EditDuration(sourceEntryIndex);
+                    //EditDuration(sourceEntryIndex);
+                    tempEntry.duration = tempEntry.endTime - tempEntry.startTime;
                     sort = true;
                 }
             }
@@ -243,14 +256,18 @@ public class TimeTracker
         if (!File.Exists(TimeTracker.UserSettings.SaveDirectory))
             return;
 
-        using (StreamReader sr = File.OpenText(TimeTracker.UserSettings.SaveDirectory))
+        //using (StreamReader sr = File.OpenText(TimeTracker.UserSettings.SaveDirectory))
+        using (StreamReader sr = new StreamReader(TimeTracker.UserSettings.SaveDirectory))
         {
             string s;
+            (DateTime, DateTime, TimeSpan, string, string, string) jsonR;
             history.Clear();
 
             while ((s = sr.ReadLine()) != null)
             {
-                history.Add(ParseArrayToTuple(s.Split("\t")));
+                //history.Add(ParseArrayToTuple(s.Split("\t")));
+                jsonR = JsonSerializer.Deserialize<(DateTime, DateTime, TimeSpan, string, string, string)>(s, jsonOptions);
+                history.Add(jsonR);
             }
         }
     }

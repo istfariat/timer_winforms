@@ -57,7 +57,7 @@ public class UserProperties
 
             Settings UserSettings = JsonSerializer.Deserialize<Settings>(jsonR)!;
 
-            test = UserSettings.SaveDirectory;
+            //test = UserSettings.SaveDirectory;
 
             return UserSettings;
             

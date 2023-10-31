@@ -64,20 +64,33 @@ namespace timer_winforms
             textBoxStageEdit.Text = tempEntry.stage;
             dateTimePickerStarttimeEdit.Value = tempEntry.startTime;
             dateTimePickerEndtimeEdit.Value = tempEntry.endTime;
+            textBoxDurationEdit.Text = tempEntry.duration.ToString();
         }
 
         private void dateTimePickerStarttimeEdit_ValueChanged(object sender, EventArgs e)
         {
-            tempEntry.startTime = dateTimePickerStarttimeEdit.Value;
-            tempEntry.duration = tempEntry.endTime - tempEntry.startTime;
+            //tempEntry.startTime = dateTimePickerStarttimeEdit.Value;
+            //tempEntry.duration = tempEntry.endTime - tempEntry.startTime;
+            //textBoxDurationEdit.Text = tempEntry.duration.ToString();
+
+            TimeTracker.EditDateTime(entryIndex, dateTimePickerStarttimeEdit.Value, false);
+            tempEntry.startTime = TimeTracker.history[entryIndex].startTime;
+            tempEntry.endTime = TimeTracker.history[entryIndex].endTime;
+            tempEntry.duration = TimeTracker.history[entryIndex].duration;
             textBoxDurationEdit.Text = tempEntry.duration.ToString();
         }
 
         private void dateTimePickerEndtimeEdit_ValueChanged(object sender, EventArgs e)
         {
-            tempEntry.endTime = dateTimePickerEndtimeEdit.Value;
-            tempEntry.duration = tempEntry.endTime - tempEntry.startTime;
+            //tempEntry.endTime = dateTimePickerEndtimeEdit.Value;
+            //tempEntry.duration = tempEntry.endTime - tempEntry.startTime;
+            //textBoxDurationEdit.Text = tempEntry.duration.ToString();
+
+            TimeTracker.EditDateTime(entryIndex, dateTimePickerEndtimeEdit.Value, true);
+            tempEntry.startTime = TimeTracker.history[entryIndex].startTime;
+            tempEntry.endTime = TimeTracker.history[entryIndex].endTime;
+            tempEntry.duration = TimeTracker.history[entryIndex].duration;
             textBoxDurationEdit.Text = tempEntry.duration.ToString();
-        }
+        } 
     }
 }
